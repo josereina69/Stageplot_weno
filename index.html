@@ -19,9 +19,10 @@
             --color-primary: #1a237e; /* Azul oscuro/índigo */
             --color-secondary: #ffc107; /* Amarillo/Ámbar */
             --color-background: #f4f5f8;
-            --stage-width: 800px;
-            --stage-height: 500px;
-            --sidebar-width: 200px; /* Nuevo tamaño para el panel lateral */
+            /* Dimensiones Fijas: 900px (18m) x 600px (12m) */
+            --stage-width-px: 900px; 
+            --stage-height-px: 600px; 
+            --sidebar-width: 200px; 
         }
 
         body {
@@ -37,7 +38,8 @@
 
         /* Contenedor principal para el PDF final */
         #documento-final {
-            width: calc(var(--stage-width) + var(--sidebar-width) + 50px); /* Ajuste de ancho total */
+            /* Se ajusta al ancho fijo del escenario + sidebar + gap */
+            width: calc(var(--stage-width-px) + var(--sidebar-width) + 50px); 
             background-color: white;
             padding: 25px; 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -50,32 +52,44 @@
         #header-documento {
             border-bottom: 3px solid var(--color-primary);
             padding-bottom: 12px;
-            margin-bottom: 25px; 
+            margin-bottom: 35px; 
             text-align: center;
         }
-        #header-title-input {
-            border: none;
+        
+        /* ESTILO ADAPTADO PARA H1 (Editable) */
+        #header-title-editable {
             font-size: 1.8em;
             font-weight: 700;
             width: 100%;
+            min-height: 40px; 
             text-align: center;
-            padding: 5px 0;
+            padding: 10px; 
+            margin: 0; 
+            white-space: pre-wrap; 
+            border: 1px solid transparent; 
             box-sizing: border-box;
+            line-height: 1.4;
+        }
+        #header-title-editable:hover {
+            border: 1px dashed #ccc;
+        }
+        #header-title-editable:focus {
+            outline: none;
+            border: 1px solid var(--color-secondary);
         }
 
         /* ------------------------- */
         /* ZONA DE TRABAJO Y ESCENARIO */
         /* ------------------------- */
         
-        /* Nuevo contenedor flexible para Herramientas + Escenario */
         #main-workspace {
             display: flex;
-            gap: 20px; /* Espacio entre el menú lateral y el escenario */
+            gap: 20px; 
             width: 100%;
-            max-width: calc(var(--stage-width) + var(--sidebar-width) + 20px);
+            /* Se ajusta al ancho fijo */
+            max-width: calc(var(--stage-width-px) + var(--sidebar-width) + 50px); 
         }
 
-        /* Panel de Herramientas (Acordeón) - Ahora a la izquierda */
         #herramientas {
             width: var(--sidebar-width); 
             min-width: var(--sidebar-width);
@@ -149,29 +163,69 @@
             border: 1px solid #ccc;
             cursor: pointer;
         }
-        .categoria-contenido button {
-             padding: 5px;
-             font-size: 0.85em;
-        }
 
 
         /* Contenedor del Escenario (Escenario + Reglas) */
         #contenedor-escenario {
             position: relative;
-            width: calc(var(--stage-width) + 30px);
-            height: calc(var(--stage-height) + 30px);
+            /* Usar variables fijas + 30px de regla */
+            width: calc(var(--stage-width-px) + 30px);
+            height: calc(var(--stage-height-px) + 30px);
             margin: 0; 
             border: 1px solid #ddd;
             background-color: #fff;
             flex-grow: 1; 
+            overflow: hidden; 
         }
         #stage-konva-container {
             position: absolute;
-            left: 30px;
+            left: 30px; /* Separación para la regla izquierda */
             top: 0px;
-            width: var(--stage-width);
-            height: var(--stage-height);
+            width: var(--stage-width-px);
+            height: var(--stage-height-px);
             background-color: transparent;
+            transform-origin: 0 0; 
+        }
+
+        /* Botón de Reset de Zoom */
+        #btn-zoom-reset {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 100;
+            background-color: white;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            opacity: 0.8;
+            width: 30px; 
+            height: 30px;
+        }
+        
+        /* Botón de Eliminar (NUEVO LUGAR) */
+        #btn-eliminar-seleccionado-plano { 
+            position: absolute;
+            top: 45px; /* Separado del btn-zoom-reset */
+            right: 5px;
+            z-index: 100;
+            background-color: #f44336; /* Rojo para borrar */
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            opacity: 0.8;
+            width: 30px; 
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #btn-eliminar-seleccionado-plano:disabled {
+            background-color: #b0b0b0;
+            cursor: not-allowed;
         }
 
         /* Reglas/Cotas */
@@ -179,19 +233,21 @@
             position: absolute;
             bottom: 0;
             left: 30px;
-            width: var(--stage-width);
+            width: var(--stage-width-px);
             height: 30px;
             background-color: #e0e0e0;
             border-top: 1px solid #ccc;
+            overflow: hidden; 
         }
         #ruler-left {
             position: absolute;
             top: 0; 
             left: 0;
             width: 30px;
-            height: var(--stage-height);
+            height: var(--stage-height-px);
             background-color: #e0e0e0;
             border-right: 1px solid #ccc;
+            overflow: hidden; 
         }
         .ruler-tick {
             position: absolute;
@@ -217,7 +273,8 @@
         /* Herramientas y Controles Superiores */
         #toolbar-gestion {
             width: 100%;
-            max-width: calc(var(--stage-width) + var(--sidebar-width) + 50px);
+            /* Se ajusta al ancho fijo */
+            max-width: calc(var(--stage-width-px) + var(--sidebar-width) + 50px);
             padding: 10px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -227,7 +284,6 @@
             border-radius: 8px;
             margin-top: 10px;
         }
-        /* Estilos específicos para los nuevos botones de la barra superior */
         .toolbar-group {
             display: flex;
             gap: 10px;
@@ -250,11 +306,56 @@
             background-color: #b0b0b0;
             cursor: not-allowed;
         }
-        /* Estilo para los botones de icono */
         .toolbar-group button.icon-only {
             padding: 8px;
             width: 40px; 
             text-align: center;
+        }
+        
+        /* Nuevo CSS para el Desplegable de Exportar */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            /* Asegurar que el estilo base del botón se aplique al dropbtn */
+            line-height: 1.2; 
+        }
+        .dropbtn:hover {
+            background-color: #3949ab;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0; /* Alinear a la derecha para que no se salga del contenedor */
+            background-color: #f9f9f9;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         /* Edición de texto flotante */
@@ -278,12 +379,10 @@
             width: 100%;
         }
 
-        #rider-container {
-            display: none;
+        /* Contenedores de Vistas Separadas */
+        #rider-lists-container, #needs-rider-editor-container {
             width: 100%;
-        }
-        #rider-container.visible {
-            display: block;
+            display: none; /* Oculto por defecto */
         }
         
         .rider-section-title {
@@ -293,20 +392,7 @@
             margin-top: 35px;
             margin-bottom: 15px;
         }
-        #editor-quill {
-            height: 200px;
-            margin-bottom: 25px;
-        }
-        #btn-add-input, #btn-add-output {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 10px !important;
-            transition: background-color 0.2s;
-        }
+
         .rider-table {
             width: 100%;
             border-collapse: collapse;
@@ -315,7 +401,7 @@
         }
         .rider-table th, .rider-table td {
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 10px; /* Reducido a 10px para celdas más compactas */
             text-align: left;
         }
         .rider-table th {
@@ -326,7 +412,7 @@
             width: 95%;
             border: none;
             background: transparent;
-            padding: 0;
+            padding: 10px 0; 
             margin: 0;
             box-sizing: border-box;
         }
@@ -338,29 +424,7 @@
             border-radius: 3px;
             cursor: pointer;
         }
-        #output-footer-info {
-            border-top: 2px solid var(--color-primary);
-            padding-top: 15px;
-            margin-top: 35px;
-            margin-bottom: 20px;
-        }
-        .footer-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr 2fr;
-            gap: 10px 20px;
-            align-items: center;
-        }
-        .footer-info-grid label {
-            font-weight: bold;
-            text-align: right;
-        }
-        #output-footer-info input {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+        
         .hidden { display: none !important; }
 
         /* Estilos de Drag and Drop para filas de tablas */
@@ -369,10 +433,10 @@
         }
         .rider-table tr.dragging {
             opacity: 0.5;
-            background-color: #e0f7fa; /* Color para indicar que se está arrastrando */
+            background-color: #e0f7fa; 
         }
         .rider-table tr td:first-child input {
-            width: 30px; /* Tamaño del input CH para que sea discreto */
+            width: 30px; 
             text-align: center;
             font-weight: bold;
         }
@@ -393,7 +457,7 @@
         }
         #file-input-label {
             display: block;
-            background-color: #4CAF50; /* Un verde amigable */
+            background-color: #4CAF50; 
             color: white;
             padding: 8px 12px;
             border-radius: 4px;
@@ -418,35 +482,82 @@
             border: 1px solid #ddd;
             padding: 5px;
         }
+        
+        /* Estilos específicos de Quill (Ajuste de altura del editor) */
+        #needs-rider-editor-quill {
+            height: 300px; /* Altura fija para el editor */
+            background-color: white;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        #needs-rider-editor-container .ql-toolbar.ql-snow {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        
+        /* ------------------------- */
+        /* TOAST NOTIFICATIONS (NUEVO) */
+        /* ------------------------- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .toast {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateX(100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast.success { background-color: #4CAF50; }
+        .toast.error { background-color: #f44336; }
+        .toast.info { background-color: #2196F3; }
     </style>
 </head>
 <body>
+    <div id="toast-container"></div> 
 
     <div id="toolbar-gestion">
         
         <div class="toolbar-group">
             <button id="btn-stageplot" class="active" onclick="setView('stagePlot')">Stage Plot</button>
             <button id="btn-rider" onclick="setView('rider')">Rider Técnico</button>
+            <button id="btn-needs-rider" onclick="setView('needsRider')">Rider Necesidades</button>
             
             <button onclick="newProject()" title="Empezar un nuevo proyecto"><i class="fas fa-file"></i> Nuevo</button>
-            <button onclick="saveProject()" title="Guardar estado en el navegador"><i class="fas fa-save"></i> Guardar</button>
-            <button onclick="loadProject()" title="Cargar estado guardado"><i class="fas fa-folder-open"></i> Cargar</button>
-        </div>
+            </div>
         
         <div class="toolbar-group" id="acciones-flotantes">
             
-            <button id="btn-eliminar-seleccionado" disabled title="Eliminar el elemento seleccionado" class="icon-only">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-            <button onclick="generarStagePlotPDF()" title="Exportar sólo el plano del escenario"><i class="fas fa-file-image"></i> Exportar Plot PDF</button>
-            <button onclick="generarListasPDF()" title="Exportar sólo la lista de canales y salidas"><i class="fas fa-list"></i> Exportar Listas PDF</button>
-            <button onclick="generarRiderCompletoPDF()" title="Exportar el documento Rider completo"><i class="fas fa-file-pdf"></i> Exportar Rider Completo</button>
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fas fa-file-export"></i> Exportar <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="exportarPlanoYListasHTML(); return false;">Plano y Listas (HTML)</a> 
+                    <a href="#" onclick="generarStagePlotPDF(); return false;">Plano (PDF)</a>
+                    <a href="#" onclick="exportarListasHTML(); return false;">Listas (HTML con formato)</a>
+                    <a href="#" onclick="exportarListasCSV(); return false;">Listas (CSV datos puros)</a>
+                </div>
+            </div>
         </div>
     </div>
     
     <div id="documento-final">
         <div id="header-documento">
-            <input type="text" id="header-title-input" value="STAGE PLOT & RIDER TÉCNICO" onchange="saveStateSilencioso()">
+            <h1 id="header-title-editable" contenteditable="true" 
+                onblur="saveStateSilencioso()" onkeypress="if(event.keyCode==13) this.blur()">
+                STAGE PLOT & RIDER TÉCNICO
+            </h1>
         </div>
 
         <div id="editor-container">
@@ -458,11 +569,16 @@
                         Edición <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="categoria-contenido abierto">
+                        
                         <div class="control-grupo">
                             <label for="color-picker">Color:</label>
-                            <input type="color" id="color-picker" value="#1a237e">
+                            <input type="color" id="color-picker" value="#000000"> 
                         </div>
-                    </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="texto" style="width: 100px;">
+                            <i class="fa-solid fa-font"></i> Texto Libre
+                        </div>
+                        
+                        </div>
 
                     <div class="categoria-header" onclick="toggleAcordeon(this)">
                         Elementos de Audio <i class="fas fa-chevron-down"></i>
@@ -528,6 +644,10 @@
                 </div>
 
                 <div id="contenedor-escenario">
+                    <button id="btn-zoom-reset" title="Volver a la escala original"><i class="fas fa-home"></i></button>
+                    <button id="btn-eliminar-seleccionado-plano" disabled title="Eliminar el elemento seleccionado">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                     <div id="ruler-left"></div>
                     <div id="ruler-bottom"></div>
                     <div id="stage-konva-container"></div>
@@ -535,10 +655,7 @@
                 </div>
             </div>
             
-            <div id="rider-container">
-                
-                <h3 class="rider-section-title">Especificaciones Adicionales (Backline, Notas, etc.)</h3>
-                <div id="editor-quill"></div>
+            <div id="rider-lists-container" style="display: none;">
                 
                 <h3 class="rider-section-title">Lista de Canales (Input List) 🎤</h3>
                 <button id="btn-add-input" onclick="agregarFilaManual('input')" style="margin-bottom: 10px;">+ Añadir Input Manual</button>
@@ -571,23 +688,11 @@
                         </tbody>
                 </table>
                 
-                <div id="output-footer-info">
-                    <h3 class="rider-section-title">Información del Show</h3>
-                    <div class="footer-info-grid">
-                        <label>Artista/Banda:</label>
-                        <input type="text" data-key="artist_name" placeholder="Nombre de la Banda">
-                        
-                        <label>Fecha del Show:</label>
-                        <input type="date" data-key="show_date">
-
-                        <label>Manager de Producción:</label>
-                        <input type="text" data-key="prod_manager" placeholder="Nombre de contacto">
-                        
-                        <label>Tel. Manager:</label>
-                        <input type="tel" data-key="prod_phone" placeholder="+34 600 00 00 00">
-                    </div>
-                </div>
-
+            </div>
+            
+            <div id="needs-rider-editor-container" style="display: none;">
+                <h3 class="rider-section-title">Rider de Necesidades / Especificaciones Técnicas Adicionales 📝</h3>
+                <div id="needs-rider-editor-quill" data-initial-content=""></div>
             </div>
         </div>
     </div>
@@ -596,11 +701,19 @@
     // ----------------------------------------------------
     // CONFIGURACIÓN INICIAL Y OBJETOS GLOBALES 
     // ----------------------------------------------------
-    const METERS_PER_PIXEL = 1 / 50; 
-    const STAGE_WIDTH = 800;  
-    const STAGE_HEIGHT = 500; 
-    const GRID_SIZE = 50; 
-    const ICON_SIZE = 25; 
+    
+    const PIXELS_PER_METER = 50; // Constante: 50 píxeles = 1 metro
+    
+    // Dimensiones Fijas (18m x 12m)
+    const STAGE_WIDTH = 900; // 18m * 50px/m
+    const STAGE_HEIGHT = 600; // 12m * 50px/m
+    const GRID_SIZE = PIXELS_PER_METER; // 1 metro = 50px
+    
+    // Dimensiones en metros (para mostrar en las cotas/exportación)
+    const STAGE_WIDTH_M = STAGE_WIDTH / PIXELS_PER_METER; // 18m
+    const STAGE_HEIGHT_M = STAGE_HEIGHT / PIXELS_PER_METER; // 12m
+    
+    const ICON_SIZE = 30; 
     const STORAGE_KEY = 'stageplot_project_v1'; 
     const CUSTOM_ICON_STORAGE_KEY = 'stageplot_custom_icon'; 
 
@@ -609,8 +722,13 @@
     let activeTextNode = null;
     let transformer = null;
     let selectedShape = null;
-    let currentView = 'stagePlot';
+    let currentView = 'stagePlot'; // Vista inicial
     let customIconDataURL = null; 
+    let quill = null; // Variable global para el editor Quill
+    
+    // Variables de Zoom y Pan
+    let scale = 1; 
+    const scaleBy = 1.1; 
 
     const { jsPDF } = window.jspdf;
 
@@ -618,83 +736,104 @@
         container: 'stage-konva-container',
         width: STAGE_WIDTH, 
         height: STAGE_HEIGHT, 
+        draggable: true, 
     });
 
     let layer = new Konva.Layer();
     stage.add(layer);
-
-    // Inicialización de Quill y elementos del DOM
-    var quill = new Quill('#editor-quill', {
-        theme: 'snow',
-        placeholder: 'Añade aquí tus especificaciones de Backline, Hospitalidad, etc.',
-        modules: {
-            toolbar: [['bold', 'italic', 'underline'], ['list', 'header'], ['clean']]
-        }
-    });
-    quill.on('text-change', saveStateSilencioso); 
-
+    
     const colorPicker = document.getElementById('color-picker');
-    const headerTitleInput = document.getElementById('header-title-input');
-    const riderInputs = document.querySelectorAll('#output-footer-info input[data-key]');
-    const btnEliminarSeleccionado = document.getElementById('btn-eliminar-seleccionado');
+    const headerTitleElement = document.getElementById('header-title-editable'); 
+    // BOTÓN DE ELIMINAR REUBICADO
+    const btnEliminarSeleccionadoPlano = document.getElementById('btn-eliminar-seleccionado-plano');
     const textInput = document.getElementById('text-input');
     const customIconFileInput = document.getElementById('custom-icon-file-input');
     const customIconPreviewContainer = document.getElementById('custom-icon-preview-container');
+    const needsRiderEditorElement = document.getElementById('needs-rider-editor-quill');
+    
+    // VARIABLES PARA BOTONES DE EDICIÓN AVANZADA ELIMINADAS
+    
+    // ----------------------------------------------------
+    // LÓGICA DE TOAST NOTIFICATIONS (NUEVO) 💬
+    // ----------------------------------------------------
 
+    /**
+     * Muestra una notificación temporal no bloqueante (Toast).
+     * @param {string} message - Mensaje a mostrar.
+     * @param {string} [type='info'] - Tipo de mensaje ('success', 'error', 'info').
+     */
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
 
+        container.appendChild(toast);
+
+        // Muestra el toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10); // Pequeño retraso para que la transición funcione
+
+        // Esconde y elimina el toast después de 4 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                container.removeChild(toast);
+            }, 500); // 500ms es el tiempo de la transición CSS
+        }, 4000);
+    }
+    
     // ----------------------------------------------------
     // LÓGICA DE PERSISTENCIA (GUARDAR Y CARGAR) 💾
     // ----------------------------------------------------
     
-    /** Guarda el estado sin mostrar un alert (para interacciones automáticas). */
+    /** Guarda el estado sin mostrar un toast (para interacciones automáticas). */
     function saveStateSilencioso() {
         const stageJSON = stage.toJSON();
-        const quillContent = quill.getContents();
+        
         const inputListBody = document.getElementById('lista-canales-body').innerHTML;
         const outputListBody = document.getElementById('lista-salidas-body').innerHTML;
-
-        const riderData = {};
-        riderInputs.forEach(input => {
-            riderData[input.getAttribute('data-key')] = input.value;
-        });
+        // Guardar el contenido de Quill como HTML
+        const needsRiderContent = quill ? quill.root.innerHTML : ''; 
 
         const projectData = {
             stage: stageJSON,
-            quill: quillContent,
             inputList: inputListBody,
             outputList: outputListBody,
-            riderData: riderData,
             canalActual: canalActual, 
             salidaActual: salidaActual,
-            headerTitle: headerTitleInput.value,
-            customIconDataURL: customIconDataURL
+            headerTitle: headerTitleElement.textContent, 
+            stageScale: stage.scaleX(), 
+            stagePos: stage.position(), 
+            customIconDataURL: customIconDataURL,
+            needsRiderContent: needsRiderContent,
+            // Las dimensiones son Fijas, no se guardan
         };
 
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(projectData));
-            console.log("Guardado automático: Estado del proyecto actualizado.");
+            // console.log("Guardado automático: Estado del proyecto actualizado."); // Se deja solo para depuración
         } catch (e) {
             console.error('Error al guardar el proyecto en localStorage:', e);
+            showToast('❌ Error al guardar el proyecto en localStorage.', 'error');
         }
     }
 
-    window.saveProject = function() {
-        saveStateSilencioso();
-        alert('✅ Proyecto guardado exitosamente en el navegador.');
-    }
+    // ELIMINADO window.saveProject (Ahora solo existe el guardado automático)
 
     window.loadProject = function() {
         const savedData = localStorage.getItem(STORAGE_KEY);
         if (!savedData) {
-            drawGridAndFrame(); 
-            console.log('No se encontró proyecto guardado. Iniciando lienzo vacío.');
+            drawGridAndFrame(); // Dibujar el lienzo si no hay datos guardados
+            // console.log('No se encontró proyecto guardado. Iniciando lienzo vacío.');
             return;
         }
 
         try {
             const projectData = JSON.parse(savedData);
             
-            // 1. Cargar Konva
+            // 1. Cargar Konva Stage (dimensiones fijas)
             stage.destroyChildren();
             const tempContainer = document.createElement('div');
             const tempStage = Konva.Node.create(projectData.stage, tempContainer);
@@ -702,17 +841,19 @@
             layer = new Konva.Layer();
             stage.add(layer);
             
+            // INICIO DE LA MODIFICACIÓN: DIBUJAR CUADRÍCULA PRIMERO
+            drawGridAndFrame(); // Asegura que el marco y la cuadrícula estén en el fondo (Z-Index más bajo)
+            
+            // 2. RE-ADJUNTAR ELEMENTOS MÓVILES (se colocarán encima de la cuadrícula)
             tempStage.find('.movable-group').forEach(group => {
                 layer.add(group);
-                // Re-añadir event listeners
+                
                 group.on('dragend', saveStateSilencioso);
                 group.on('transformend', function () { 
                     const label = group.children.find(c => c.name() === 'icon-label');
                     if (label) {
-                        // Recalcular posición del label
                         const groupWidth = group.width() * group.scaleX();
                         const groupHeight = group.height() * group.scaleY();
-                        
                         label.x(groupWidth / 2); 
                         label.y(-label.height() - 5); 
                         label.offsetX(label.width() / 2);
@@ -720,126 +861,247 @@
                     layer.draw();
                     saveStateSilencioso(); 
                 });
-                group.on('dblclick dbltap', function (e) { 
-                    e.cancelBubble = true; 
-                    activeTextNode = group.children.find(c => c.name() === 'icon-label');
-                    showTextEditor(activeTextNode);
+                
+                group.on('dblclick dbltap', function (e) {
+                    e.cancelBubble = true;
+                    const isFreeText = group.getAttr('data_type') === 'texto';
+
+                    if (isFreeText) {
+                        activeTextNode = group.children.find(c => c.name() === 'icon-shape');
+                    } else {
+                        activeTextNode = group.children.find(c => c.name() === 'icon-label');
+                    }
+                    
+                    if(activeTextNode) {
+                        showTextEditor(activeTextNode);
+                    }
                 });
+                
                 group.on('click tap', function (e) { selectShape(group); });
             });
+            // FIN DE LA MODIFICACIÓN
 
-            drawGridAndFrame();
-            layer.draw();
+            // 3. Cargar Zoom/Pan
+            scale = projectData.stageScale || 1;
+            const pos = projectData.stagePos || { x: 0, y: 0 };
+            stage.scale({ x: scale, y: scale });
+            stage.position(pos);
 
-            // 2. Cargar Quill y Rider Data
-            quill.setContents(projectData.quill);
-            document.getElementById('lista-canales-body').innerHTML = projectData.inputList;
-            document.getElementById('lista-salidas-body').innerHTML = projectData.outputList;
+            // 4. Cargar Título
+            headerTitleElement.textContent = projectData.headerTitle || "STAGE PLOT & RIDER TÉCNICO";
             
-            // Re-vincular eventos de arrastre y edición manual
-            attachDragEvents();
-
-
-            // Cargar los inputs del Rider 
-            riderInputs.forEach(input => {
-                const key = input.getAttribute('data-key');
-                if (projectData.riderData && projectData.riderData[key] !== undefined) {
-                    input.value = projectData.riderData[key];
-                }
-            });
-
+            // 5. Cargar Listas (innerHTML)
+            document.getElementById('lista-canales-body').innerHTML = projectData.inputList || '';
+            document.getElementById('lista-salidas-body').innerHTML = projectData.outputList || '';
             canalActual = projectData.canalActual || 0;
             salidaActual = projectData.salidaActual || 0;
-            headerTitleInput.value = projectData.headerTitle || "STAGE PLOT & RIDER TÉCNICO";
+            attachDragEvents();
             
-            // Cargar icono personalizado
-            if (projectData.customIconDataURL) {
-                customIconDataURL = projectData.customIconDataURL;
-                displayCustomIconInPanel(customIconDataURL);
+            // 6. Cargar Custom Icon
+            customIconDataURL = projectData.customIconDataURL || null;
+            if (customIconDataURL) {
+                updateCustomIconTool(customIconDataURL);
+            } else {
+                // Limpiar si no hay icono guardado
+                customIconPreviewContainer.innerHTML = ''; 
             }
 
-            alert('✅ Proyecto cargado exitosamente.');
+            // 7. Cargar Rider de Necesidades (Almacenar para Quill)
+            const needsRiderContent = projectData.needsRiderContent || '';
+            if (quill) {
+                quill.root.innerHTML = needsRiderContent;
+            } else {
+                needsRiderEditorElement.setAttribute('data-initial-content', needsRiderContent);
+            }
+            
+            layer.draw();
+            // showToast('✅ Proyecto cargado exitosamente.', 'success'); // Eliminado para no mostrar toast al inicio
         } catch (e) {
-            console.error(e);
-            alert('❌ Error al cargar el proyecto: Los datos guardados son inválidos. Revisa la consola para más detalles.');
+            console.error('❌ Error al cargar el proyecto:', e);
+            showToast('❌ Error al cargar el proyecto: Los datos guardados son inválidos. Revisa la consola para más detalles.', 'error');
+            drawGridAndFrame(); // Asegurar que al menos el lienzo se dibuje
         }
     }
 
     function saveState() {
         saveStateSilencioso();
     }
-    
     // ----------------------------------------------------
     // LÓGICA KONVA
     // ----------------------------------------------------
 
     function getFaUnicode(tipo) {
         const iconMap = {
-            'microfono': '\uf130',    
-            'cajadi': '\uf6a3',       
-            'receptor_mic': '\uf1eb', 
-            'receptor_iem': '\uf5e7', 
-            'amplificador': '\uf028', 
-            'bateria': '\uf5e8',      
-            'teclado': '\uf890',      
-            'atrils': '\uf518',       
-            'monitor': '\uf5e6',      
-            'consola': '\uf640',       
-            'portatil': '\uf109',      
-            'stagebox': '\uf466',      
+            'microfono': '\uf130',
+            'cajadi': '\uf6a3',
+            'receptor_mic': '\uf1eb',
+            'receptor_iem': '\uf5e7',
+            'amplificador': '\uf028',
+            'bateria': '\uf5e8',
+            'teclado': '\uf890',
+            'atrils': '\uf518',
+            'monitor': '\uf5e6',
+            'consola': '\uf640',
+            'portatil': '\uf109',
+            'stagebox': '\uf466',
         };
         return iconMap[tipo] || '\uf041';
     }
+
+    /**
+     * Extrae el número de canal o mix de una etiqueta Konva, buscando formatos 
+     * como "(Ch X)", "Mic ch5", "IEM mix 3".
+     * * **CORRECCIÓN CLAVE**
+     * * @param {string} label - Etiqueta a analizar.
+     * @returns {{number: number, cleanLabel: string, listType: string}}
+     */
+    function extractChannelNumber(label) {
+        let number = 0;
+        let listType = '';
+        let cleanLabel = label.trim();
+        let match = null;
+
+        // 1. Buscar el formato generado por el sistema: (Ch X), (Mix X)
+        match = cleanLabel.match(/\s+\((Ch|Mix)\s*(\d+)\)$/i);
+        
+        if (match) {
+            // Eliminar el formato del sistema para tener la etiqueta limpia
+            cleanLabel = cleanLabel.substring(0, cleanLabel.lastIndexOf(match[0])).trim();
+            listType = match[1].toLowerCase() === 'ch' ? 'input' : 'output';
+            number = parseInt(match[2], 10);
+        } else {
+            // 2. Buscar formatos de entrada de usuario: chX, mixX, canal X, mon X, etc.
+            // Se busca cualquier combinación de palabras clave seguida de un número.
+            match = cleanLabel.match(/(ch|can|mix|out|mon)\s*(\d+)/i);
+            
+            if (match) {
+                const typeKeyword = match[1].toLowerCase();
+                if (typeKeyword.startsWith('ch') || typeKeyword.startsWith('can')) {
+                    listType = 'input';
+                } else if (typeKeyword.startsWith('mix') || typeKeyword.startsWith('out') || typeKeyword.startsWith('mon')) {
+                    listType = 'output';
+                }
+                
+                number = parseInt(match[2], 10);
+                
+                // Eliminar el match (ej: "ch5") de la etiqueta para obtener el nombre limpio
+                cleanLabel = cleanLabel.replace(match[0], '').trim();
+            }
+        }
+
+        // Limpiar cualquier residuo de paréntesis o espacios múltiples
+        cleanLabel = cleanLabel.replace(/[\(\)\[\]\{\}]/g, '').replace(/\s\s+/g, ' ').trim();
+
+        // Si la etiqueta queda vacía (e.g. el usuario solo escribió "ch5"), se usa el nombre original de la lista
+        if (cleanLabel === '') {
+            cleanLabel = label.replace(label.match(/\s+\((Ch|Mix)\s*(\d+)\)$/i)?.[0] || label.match(/(ch|can|mix|out|mon)\s*(\d+)/i)?.[0] || '', '').trim() || "Elemento";
+        }
+        
+        return {
+            number: number, 
+            cleanLabel: cleanLabel, 
+            listType: listType
+        };
+    }
+
 
     function createKonvaIcon(tipo, x, y, fill, imageDataURL = null) {
         const uniqueId = `konva-${Date.now()}`;
         let mainShape;
         let defaultLabel = tipo.charAt(0).toUpperCase() + tipo.slice(1);
-        let canalAsignado = 0;
+        let canalAsignado = 0; // Se asigna al soltarlo en handleDrop
         let offsetX = 0;
         let offsetY = 0;
         let groupWidth = ICON_SIZE;
         let groupHeight = ICON_SIZE;
+        let hasLabel = true;
 
-
-        if (imageDataURL) {
-            // Icono personalizado (imagen)
-            defaultLabel = "Imagen Personalizada";
-            const img = new Image();
-            img.src = imageDataURL;
-            mainShape = new Konva.Image({
-                image: img,
-                x: 0, y: 0,
-                width: ICON_SIZE, height: ICON_SIZE,
-                name: 'icon-shape', data_type: 'custom_image', data_id_vinculacion: uniqueId,
+        if (tipo === 'texto') {
+            hasLabel = false;
+            defaultLabel = "Doble click para editar";
+            mainShape = new Konva.Text({
+                x: 0,
+                y: 0,
+                text: defaultLabel,
+                fontSize: 14,
+                fontFamily: 'Arial',
+                fill: fill,
+                width: 150, 
+                padding: 5,
+                align: 'left',
+                name: 'icon-shape', // Para texto libre, el texto es la forma editable
+                data_type: tipo,
+                data_id_vinculacion: uniqueId,
             });
-            groupWidth = ICON_SIZE;
-            groupHeight = ICON_SIZE;
-            offsetX = ICON_SIZE / 2;
-            offsetY = ICON_SIZE / 2;
+            groupWidth = 150;
+            groupHeight = mainShape.height();
+            offsetX = 0;
+            offsetY = 0;
 
         } else if (tipo === 'tarima') {
-            // Tarima: Rectángulo de 2m x 1m (100px x 50px)
-            mainShape = new Konva.Rect({
-                x: 0, y: 0,
-                width: 100, height: 50, // 2m x 1m
-                fill: fill, stroke: 'black', strokeWidth: 1,
-                name: 'icon-shape', data_type: tipo, data_id_vinculacion: uniqueId,
-            });
+             // Tarima (Rectángulo)
             defaultLabel = "Tarima";
-            groupWidth = 100;
-            groupHeight = 50;
-            offsetX = 100 / 2; // Centrar en el rectángulo
-            offsetY = 50 / 2; // Centrar en el rectángulo
+            groupWidth = 200; // 4 metros
+            groupHeight = 100; // 2 metros
+            mainShape = new Konva.Rect({
+                x: 0,
+                y: 0,
+                width: groupWidth,
+                height: groupHeight,
+                fill: '#e0e0e0',
+                stroke: '#555555',
+                strokeWidth: 2,
+                name: 'icon-shape',
+                data_type: tipo,
+                data_id_vinculacion: uniqueId,
+            });
+            offsetX = groupWidth / 2;
+            offsetY = groupHeight / 2;
+            hasLabel = true;
+
+        } else if (tipo === 'custom_image' && imageDataURL) {
+            // Icono de Imagen Personalizada
+            defaultLabel = "Custom";
+            mainShape = new Konva.Image({
+                x: 0,
+                y: 0,
+                image: new Image(),
+                width: ICON_SIZE,
+                height: ICON_SIZE,
+                name: 'icon-shape',
+                data_type: tipo,
+                data_id_vinculacion: uniqueId,
+            });
+
+            // Cargar la imagen
+            const img = new Image();
+            img.onload = function() {
+                mainShape.image(img);
+                // Ajustar groupWidth/Height si es necesario basándose en el tamaño de la imagen/icono
+                layer.draw();
+            };
+            img.src = imageDataURL;
+            
+            offsetX = ICON_SIZE / 2;
+            offsetY = ICON_SIZE / 2;
+            groupWidth = ICON_SIZE;
+            groupHeight = ICON_SIZE;
+            hasLabel = true; 
 
         } else {
-            // Iconos de Font Awesome
-            const unicode = getFaUnicode(tipo);
+            // Iconos de FontAwesome (Micrófono, DI, etc.)
+            // CREAMOS SOLO CON EL NOMBRE BASE. El canal se asigna al soltarlo en handleDrop.
             mainShape = new Konva.Text({
-                x: 0, y: 0,
-                text: unicode, fontSize: ICON_SIZE, fontFamily: 'Font Awesome 6 Free', 
-                fontStyle: '900', fill: fill, name: 'icon-shape', 
-                data_type: tipo, data_id_vinculacion: uniqueId, 
+                x: 0,
+                y: 0,
+                text: getFaUnicode(tipo),
+                fontSize: ICON_SIZE,
+                fontFamily: 'Font Awesome 6 Free',
+                fontStyle: '900',
+                fill: fill,
+                name: 'icon-shape',
+                data_type: tipo,
+                data_id_vinculacion: uniqueId,
             });
             groupWidth = ICON_SIZE;
             groupHeight = ICON_SIZE;
@@ -847,517 +1109,866 @@
             offsetY = ICON_SIZE / 2;
         }
 
-        const label = new Konva.Text({
-            x: 0, y: 0, 
-            text: defaultLabel,
-            fontSize: 10, fontFamily: 'Arial, sans-serif', fill: fill, align: 'center',
-            name: 'icon-label', listening: false, rotation: 0,
-        });
-
         const group = new Konva.Group({
-            x: x, y: y, draggable: true, name: 'movable-group',
+            x: x,
+            y: y,
+            draggable: true,
+            name: 'movable-group',
             data_id_vinculacion: uniqueId,
-            data_type: tipo, data_canal: canalAsignado,
-            offsetX: offsetX, offsetY: offsetY // Centrar el arrastre
+            data_type: tipo,
+            data_canal: canalAsignado, // 0 initially
+            offsetX: offsetX,
+            offsetY: offsetY
         });
 
         group.add(mainShape);
-        group.add(label);
+
+        let label;
+        if (hasLabel) {
+            label = new Konva.Text({
+                x: 0,
+                y: 0,
+                text: defaultLabel,
+                fontSize: 10,
+                fontFamily: 'Arial',
+                fill: fill,
+                align: 'center',
+                name: 'icon-label',
+                listening: false,
+                rotation: 0,
+            });
+
+            group.add(label);
+
+            // Posicionar la etiqueta por encima del centro del grupo
+            label.x(groupWidth / 2);
+            label.y(-label.height() - 5);
+            label.offsetX(label.width() / 2);
+        }
+
+        group.on('dragend', saveStateSilencioso);
         
-        // Ajustar posición inicial del label después de añadirlo al grupo y conocer su tamaño
-        label.x(groupWidth / 2); // Centrar en el ancho del grupo
-        label.y(-label.height() - 5); // Posicionar encima del grupo
-        label.offsetX(label.width() / 2); // Centrar el texto en su propio eje X
-
-        group.on('dragend', saveStateSilencioso); 
-
         group.on('transformend', function () {
-            // FIX: La escala ya no se resetea aquí, permitiendo el redimensionamiento
             const labelNode = group.children.find(c => c.name() === 'icon-label');
+            
+            // Lógica de recolocación de la etiqueta para iconos/formas escaladas
             if (labelNode) {
-                // Usamos group.width() y group.height() para calcular el centro
-                labelNode.x(group.width() * group.scaleX() / 2); 
-                labelNode.y(-labelNode.height() - 5);
-                labelNode.offsetX(labelNode.width() / 2);
+                const groupWidthScaled = group.width() * group.scaleX();
+                const groupHeightScaled = group.height() * group.scaleY();
+
+                // Para Tarimas (Rects) o Textos, la etiqueta se mantiene en el centro superior.
+                if (group.getAttr('data_type') === 'tarima' || group.getAttr('data_type') === 'texto') {
+                    labelNode.x(groupWidthScaled / 2);
+                    labelNode.y(-labelNode.height() - 5);
+                    labelNode.offsetX(labelNode.width() / 2);
+                } else {
+                    // Para iconos centrados, usar el centro del grupo (que es (0,0) con el offset aplicado)
+                    labelNode.x(0);
+                    labelNode.y(-labelNode.height() - 5);
+                    labelNode.offsetX(labelNode.width() / 2);
+                }
             }
+            
             layer.draw();
-            saveStateSilencioso(); 
+            saveStateSilencioso();
         });
 
+
+        // NUEVO: Manejo de doble click para texto libre (icon-shape) o etiqueta (icon-label)
         group.on('dblclick dbltap', function (e) {
-            e.cancelBubble = true; 
-            activeTextNode = group.children.find(c => c.name() === 'icon-label');
-            showTextEditor(activeTextNode);
+            e.cancelBubble = true;
+            const isFreeText = group.getAttr('data_type') === 'texto';
+
+            if (isFreeText) {
+                // Para texto libre, el texto es la forma principal
+                activeTextNode = group.children.find(c => c.name() === 'icon-shape');
+            } else {
+                // Para todos los demás, es la etiqueta
+                activeTextNode = group.children.find(c => c.name() === 'icon-label');
+            }
+            
+            if(activeTextNode) {
+                showTextEditor(activeTextNode);
+            }
         });
         
         group.on('click tap', function (e) {
-            selectShape(group);
+            // Asegurar que solo se selecciona si no se está doblando click
+            if (!e.cancelBubble) {
+                selectShape(group);
+            }
         });
 
+        // Habilitar Transformador solo para grupos (tarimas, texto libre, etc.)
+        if (tipo === 'tarima' || tipo === 'texto' || tipo === 'custom_image') {
+             group.setAttrs({
+                // Configuración predeterminada para el transformador. 
+                rotatable: true,
+                resizeEnabled: true,
+             });
+        }
+        
         return group;
     }
-    
+
     function removeTransformer() {
         if (transformer) {
             transformer.destroy();
             transformer = null;
         }
         selectedShape = null;
-        btnEliminarSeleccionado.disabled = true;
-        layer.draw();
-    }
-    
-    function selectShape(shape) {
-        if (selectedShape === shape) return;
-        removeTransformer();
-        
-        if (shape && shape.name() === 'movable-group') {
-            selectedShape = shape;
-            transformer = new Konva.Transformer({
-                node: shape,
-                enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-                boundBoxFunc: (oldBox, newBox) => (newBox.width < 5 || newBox.height < 5) ? oldBox : newBox,
-                rotateAnchorOffset: 50,
-            });
-            layer.add(transformer);
-            btnEliminarSeleccionado.disabled = false;
-        } else {
-            btnEliminarSeleccionado.disabled = true;
-        }
+        // Deshabilitar el botón de eliminar
+        btnEliminarSeleccionadoPlano.disabled = true;
         layer.draw();
     }
 
-    // El botón de eliminar se movió a la barra superior
-    btnEliminarSeleccionado.addEventListener('click', () => {
+    function selectShape(shape) {
+        removeTransformer();
+        selectedShape = shape;
+
+        transformer = new Konva.Transformer({
+            node: shape,
+            // Configuración para permitir redimensionamiento y rotación
+            enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'rotater'],
+            rotationSnaps: [0, 90, 180, 270], 
+            // Limitar la escala mínima para evitar que desaparezcan
+            boundBoxFunc: function (oldBox, newBox) {
+                if (newBox.width < 5 || newBox.height < 5) {
+                    return oldBox;
+                }
+                return newBox;
+            }
+        });
+
+        shape.getParent().add(transformer);
+        
+        // El selector de color solo afecta al color del icono/texto si no es una imagen
+        const iconShape = shape.children.find(c => c.name() === 'icon-shape');
+        if (iconShape) {
+             const shapeFill = iconShape.fill() || iconShape.stroke() || '#000000';
+             colorPicker.value = shapeFill;
+        }
+
+        // Habilitar el botón reubicado
+        btnEliminarSeleccionadoPlano.disabled = false;
+        layer.draw();
+    }
+
+    // LISTENER ACTUALIZADO para el botón reubicado
+    btnEliminarSeleccionadoPlano.addEventListener('click', () => {
         if (selectedShape) {
             const idVinculacion = selectedShape.getAttr('data_id_vinculacion');
             selectedShape.destroy();
             removeTransformer();
-            eliminarFila(idVinculacion); // Esto eliminará la fila si existe
-            // ¡La renumeración ahora está dentro de eliminarFila!
+            eliminarFila(idVinculacion);
+            showToast('🗑️ Elemento eliminado del plano.', 'info');
+        }
+    });
+    
+    // LISTENERS para las nuevas herramientas de edición ELIMINADOS
+    
+    colorPicker.addEventListener('input', function() {
+        if (selectedShape) {
+            const iconShape = selectedShape.children.find(c => c.name() === 'icon-shape');
+            const iconLabel = selectedShape.children.find(c => c.name() === 'icon-label');
+
+            if (iconShape && iconShape.getAttr('data_type') !== 'custom_image') {
+                // Para rectángulos (Tarima) o Textos de Icono, cambiar el color principal.
+                iconShape.fill(this.value);
+            }
+            if (iconLabel) {
+                 // Cambiar el color de la etiqueta
+                 iconLabel.fill(this.value);
+            }
+            
+            layer.draw();
+            saveStateSilencioso();
         }
     });
 
     stage.on('click tap', function (e) {
-        if (e.target === stage || e.target.name() === 'stage-frame') {
+        // Si el click es en el stage, el frame o la cuadrícula, deseleccionar
+        if (e.target === stage || e.target.name() === 'stage-frame' || e.target.name() === 'grid-line') {
             removeTransformer();
             textInput.style.display = 'none';
         }
     });
 
-    colorPicker.addEventListener('input', function() {
-        if (selectedShape) {
-            const iconShape = selectedShape.children.find(c => c.name() === 'icon-shape');
-            const iconLabel = selectedShape.children.find(c => c.name() === 'icon-label');
-            if (iconShape && iconShape.getAttr('data_type') !== 'custom_image') { // No cambiar color de img custom
-                iconShape.fill(this.value);
-            }
-            if (iconLabel) iconLabel.fill(this.value);
-            layer.draw();
-            saveStateSilencioso(); 
-        }
-    });
-
     function showTextEditor(textNode) {
-        const stageBox = stage.container().getBoundingClientRect();
-        const nodePos = textNode.absolutePosition();
-        
-        textInput.value = textNode.text();
-        textInput.style.display = 'block';
-        // Ajuste de posición: el editor de texto flotante debe tener en cuenta el offset de la regla lateral (30px)
         const stageKonvaContainer = document.getElementById('stage-konva-container');
         const stageKonvaRect = stageKonvaContainer.getBoundingClientRect();
-        
-        textInput.style.left = (stageKonvaRect.left + nodePos.x) + 'px';
-        textInput.style.top = (stageKonvaRect.top + nodePos.y - textInput.offsetHeight / 2) + 'px';
+        const nodePos = textNode.absolutePosition();
 
+        textInput.value = textNode.text();
+        textInput.style.display = 'block';
+
+        // Ajuste de posición: el input de texto debe tener en cuenta el zoom/pan del stage
+        const scaleFactor = stage.scaleX();
+        const stagePos = stage.position();
+
+        const absoluteX = stageKonvaRect.left + (nodePos.x * scaleFactor) + stagePos.x;
+        const absoluteY = stageKonvaRect.top + (nodePos.y * scaleFactor) + nodePos.height + stagePos.y;
+
+        textInput.style.left = absoluteX + 'px';
+        textInput.style.top = absoluteY - textInput.offsetHeight / 2 + 'px';
+        
         textInput.focus();
 
         textInput.onblur = function() {
+            // El texto se actualiza en la tabla y en Konva mediante updateTableSourceLabelFromKonva
             textNode.text(textInput.value);
-            // Reajustar label al grupo padre después de editar texto
+
             const parentGroup = textNode.getParent();
-            if (parentGroup) {
-                // Usamos group.width() y group.height() para calcular el centro después de la escala
-                const groupWidth = parentGroup.width() * parentGroup.scaleX();
-                const groupHeight = parentGroup.height() * parentGroup.scaleY();
-                
-                textNode.x(groupWidth / 2);
-                textNode.y(-textNode.height() - 5);
-                textNode.offsetX(textNode.width() / 2);
+            const dataType = parentGroup ? parentGroup.getAttr('data_type') : null;
+
+            // Si es la etiqueta de un elemento vinculado, actualizar la lista (llamada clave para el reordenamiento)
+            if (textNode.name() === 'icon-label') {
+                const idVinculacion = parentGroup.getAttr('data_id_vinculacion');
+                // Llama a la función que actualiza la tabla y maneja el reordenamiento si el canal fue especificado
+                updateTableSourceLabelFromKonva(idVinculacion, textInput.value); 
+            } else if (dataType === 'texto') {
+                // Si es un texto libre, debemos recalcular el alto y el transformador
+                textNode.setAttr('height', 'auto'); // Permite que Konva recalcule el alto
+                textNode.fire('transform'); // Disparar transformación para actualizar el transformador
+                saveStateSilencioso(); // Guardar el cambio del texto libre
             }
+
             textInput.style.display = 'none';
             layer.draw();
-            saveStateSilencioso(); 
-            // También actualizamos el label de la fila del rider si está vinculada
-            const idVinculacion = selectedShape.getAttr('data_id_vinculacion');
-            const rowInput = document.querySelector(`tr[data-id-vinculacion="${idVinculacion}"] td:nth-child(2) input`);
-            if (rowInput) {
-                rowInput.value = textInput.value;
-                saveStateSilencioso();
-            }
-        };
-
-        textInput.onkeydown = function(e) {
-            if (e.key === 'Enter') {
-                textInput.blur();
-            }
-        };
+        }
     }
 
-    const toolIcons = document.querySelectorAll('.icono-arrastrable');
-    toolIcons.forEach(icon => {
-        icon.addEventListener('dragstart', (e) => {
-            const dataType = e.target.getAttribute('data-tipo');
-            e.dataTransfer.setData('text/plain', dataType);
-            if (dataType === 'custom_image' && customIconDataURL) {
-                 e.dataTransfer.setData('image/png', customIconDataURL); // Para el Konva.Image
-            }
+    // ----------------------------------------------------
+    // LÓGICA DRAG AND DROP (Herramientas a Escenario)
+    // ----------------------------------------------------
+    
+    // Función de ayuda para adjuntar el evento de drag a un icono de herramienta
+    function attachToolIconDragEvent(iconEl) {
+        iconEl.addEventListener('dragstart', function (e) {
+            const tipo = this.getAttribute('data-tipo');
+            e.dataTransfer.setData('text/plain', tipo);
+            e.dataTransfer.effectAllowed = 'copy';
         });
+    }
+
+    // Adjuntar a iconos estándar
+    document.querySelectorAll('.icono-arrastrable:not(.custom-icon-preview)').forEach(attachToolIconDragEvent);
+
+    // Configuración del contenedor para aceptar el drop
+    const stageKonvaContainer = document.getElementById('stage-konva-container');
+    stageKonvaContainer.addEventListener('dragover', function (e) {
+        e.preventDefault(); 
+        e.dataTransfer.dropEffect = 'copy';
     });
 
-    const stageContainer = document.getElementById('contenedor-escenario');
-    stageContainer.addEventListener('dragover', (e) => e.preventDefault());
+    stageKonvaContainer.addEventListener('drop', handleDrop);
 
-    stageContainer.addEventListener('drop', (e) => {
+    function handleDrop(e) {
         e.preventDefault();
+        removeTransformer(); 
+
         const tipo = e.dataTransfer.getData('text/plain');
+        
+        // 1. Obtener el rectángulo del contenedor Konva en la pantalla
+        const stageKonvaRect = stageKonvaContainer.getBoundingClientRect();
+        
+        // 2. Calcular la posición de drop relativa al Konva Stage (0,0 del canvas)
+        const dropX = e.clientX - stageKonvaRect.left;
+        const dropY = e.clientY - stageKonvaRect.top;
 
-        if (!tipo) return;
+        // 3. Obtener la transformación inversa (zoom y pan) del Stage
+        const transform = stage.getAbsoluteTransform().copy();
+        transform.invert();
 
-        const stageRect = stageContainer.getBoundingClientRect();
-        // Ajustamos la posición de caída para que esté dentro del stage-konva-container (izq: 30px)
-        const dropX = e.clientX - stageRect.left - 30; 
-        const dropY = e.clientY - stageRect.top;
+        // 4. Aplicar la transformación inversa para obtener la posición lógica (x, y)
+        const dropPoint = transform.point({ x: dropX, y: dropY });
+
+        // Verificar que el punto de caída esté dentro del límite del Stage (STAGE_WIDTH x STAGE_HEIGHT)
+        if (dropPoint.x < 0 || dropPoint.x > STAGE_WIDTH || dropPoint.y < 0 || dropPoint.y > STAGE_HEIGHT) {
+            // console.log("Elemento soltado fuera del área del escenario.");
+            showToast('Elemento soltado fuera del área del escenario.', 'error');
+            return;
+        }
 
         let newIcon;
         if (tipo === 'custom_image' && customIconDataURL) {
-            newIcon = createKonvaIcon(tipo, dropX, dropY, colorPicker.value, customIconDataURL);
+            newIcon = createKonvaIcon(tipo, dropPoint.x, dropPoint.y, colorPicker.value, customIconDataURL);
         } else {
-            newIcon = createKonvaIcon(tipo, dropX, dropY, colorPicker.value);
+            newIcon = createKonvaIcon(tipo, dropPoint.x, dropPoint.y, colorPicker.value);
         }
-        
+
         layer.add(newIcon);
         layer.draw();
         selectShape(newIcon);
-        saveStateSilencioso(); 
-    });
+        saveStateSilencioso();
+        showToast('➕ Elemento añadido al plano.', 'success');
 
-    // Lógica para subir icono personalizado
-    customIconFileInput.addEventListener('change', (e) => {
+
+        const dataType = newIcon.getAttr('data_type');
+        
+        // Agregar a la lista de inputs solo si es un elemento de audio/instrumento
+        if (dataType !== 'tarima' && dataType !== 'custom_image' && dataType !== 'texto') {
+            const idVinculacion = newIcon.getAttr('data_id_vinculacion');
+            
+            // Obtener la etiqueta del icono (solo el nombre por defecto)
+            const labelNode = newIcon.children.find(c => c.name() === 'icon-label');
+            let initialLabelText = labelNode ? labelNode.text() : dataType.charAt(0).toUpperCase() + dataType.slice(1);
+
+            // Al crear el icono, no hay información de canal en initialLabelText, pero se sigue la lógica de inserción
+            const { cleanLabel } = extractChannelNumber(initialLabelText);
+            
+            // Asignar el tipo de lista (Input por defecto)
+            let listType = 'input';
+            if (dataType === 'monitor' || dataType === 'receptor_iem') {
+                listType = 'output';
+            }
+            
+            // Usar la función unificada para insertar en la siguiente posición libre (requestedChannel = 0)
+            insertarFilaEnCanal(listType, dataType, idVinculacion, cleanLabel, 0); 
+        }
+    }
+    
+    // ----------------------------------------------------
+    // LÓGICA CUSTOM ICON (Imagen subida por el usuario)
+    // ----------------------------------------------------
+
+    function updateCustomIconTool(dataURL) {
+        customIconDataURL = dataURL; 
+        
+        // 1. Limpiar el contenedor de previsualización
+        customIconPreviewContainer.innerHTML = '';
+        
+        // 2. Crear la imagen de previsualización
+        const img = document.createElement('img');
+        img.src = dataURL;
+        customIconPreviewContainer.appendChild(img);
+        
+        // 3. Crear el icono arrastrable con la clase custom-icon-preview
+        let draggableIcon = document.querySelector('.icono-arrastrable[data-tipo="custom_image"]');
+        if (!draggableIcon) {
+            draggableIcon = document.createElement('div');
+            draggableIcon.className = 'icono-arrastrable custom-icon-preview';
+            draggableIcon.setAttribute('draggable', 'true');
+            draggableIcon.setAttribute('data-tipo', 'custom_image');
+            
+            // Añadir el nuevo elemento al contenedor de la categoría
+            document.querySelector('.categoria-contenido:last-child').appendChild(draggableIcon);
+            
+            // Adjuntar evento de drag al nuevo icono
+            attachToolIconDragEvent(draggableIcon); 
+        }
+        
+        // 4. Actualizar el contenido del icono arrastrable
+        draggableIcon.innerHTML = ''; 
+        draggableIcon.appendChild(img.cloneNode(true));
+
+        // 5. Guardar en localStorage
+        localStorage.setItem(CUSTOM_ICON_STORAGE_KEY, dataURL);
+        saveStateSilencioso();
+        // showToast('🖼️ Icono personalizado cargado y listo para usar.', 'success'); // Comentado para no spammear al cargar el proyecto
+    }
+    
+    customIconFileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (event) => {
-                customIconDataURL = event.target.result;
-                displayCustomIconInPanel(customIconDataURL);
-                saveStateSilencioso(); // Guardar el data URL en el proyecto
+            reader.onload = function(event) {
+                updateCustomIconTool(event.target.result);
+                showToast('🖼️ Icono personalizado cargado y listo para usar.', 'success');
             };
             reader.readAsDataURL(file);
         }
     });
 
-    function displayCustomIconInPanel(dataURL) {
-        customIconPreviewContainer.innerHTML = ''; // Limpiar previsualización anterior
-        const img = document.createElement('img');
-        img.src = dataURL;
+    // ----------------------------------------------------
+    // LÓGICA ZOOM Y REGLAS
+    // ----------------------------------------------------
+    
+    stageKonvaContainer.addEventListener('wheel', (e) => {
+        e.preventDefault(); 
+        removeTransformer();
 
-        const draggableDiv = document.createElement('div');
-        draggableDiv.className = 'icono-arrastrable custom-icon-preview';
-        draggableDiv.draggable = true;
-        draggableDiv.setAttribute('data-tipo', 'custom_image');
-        draggableDiv.appendChild(img);
+        const oldScale = stage.scaleX();
+        const pointer = stage.getPointerPosition();
+        
+        // Dirección de zoom: Arriba (e.deltaY < 0) = Acercar
+        const newScale = e.deltaY < 0 ? Math.min(oldScale * scaleBy, 4) : Math.max(oldScale / scaleBy, 0.2); // Limitar zoom entre 0.2x y 4x
 
-        customIconPreviewContainer.appendChild(draggableDiv);
-        attachToolIconDragEvent(draggableDiv); // Re-adjuntar el evento de arrastre
-    }
+        const mousePointTo = {
+            x: (pointer.x) / oldScale,
+            y: (pointer.y) / oldScale,
+        };
 
-    function attachToolIconDragEvent(iconElement) {
-        iconElement.addEventListener('dragstart', (e) => {
-            const dataType = e.target.closest('.icono-arrastrable').getAttribute('data-tipo');
-            e.dataTransfer.setData('text/plain', dataType);
-            if (dataType === 'custom_image' && customIconDataURL) {
-                 e.dataTransfer.setData('image/png', customIconDataURL);
+        const newPos = {
+            x: pointer.x - mousePointTo.x * newScale,
+            y: pointer.y - mousePointTo.y * newScale,
+        };
+
+        stage.scale({ x: newScale, y: newScale });
+        stage.position(newPos);
+        scale = newScale;
+
+        updateRulers(scale, stage.position());
+        layer.draw();
+        saveStateSilencioso();
+    });
+
+    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+        scale = 1;
+        stage.scale({ x: scale, y: scale });
+        stage.position({ x: 0, y: 0 });
+        updateRulers(scale, stage.position());
+        layer.draw();
+        saveStateSilencioso();
+        showToast('🏠 Vista del plano restablecida.', 'info');
+    });
+
+    stage.on('dragmove', () => {
+        updateRulers(stage.scaleX(), stage.position());
+    });
+
+    /**
+     * Dibuja o actualiza las marcas de cota basadas en la escala y posición del Stage Konva.
+     */
+    function updateRulers(currentScale, position) {
+        const rulerBottomEl = document.getElementById('ruler-bottom');
+        const rulerLeftEl = document.getElementById('ruler-left');
+        rulerBottomEl.innerHTML = '';
+        rulerLeftEl.innerHTML = '';
+
+        // Estas son las dimensiones en metros (unidades de cota)
+        const totalMetersX = STAGE_WIDTH_M;
+        const totalMetersY = STAGE_HEIGHT_M;
+
+        const panX = position.x;
+        const panY = position.y;
+
+        // Regla Horizontal (Eje X)
+        // GRID_SIZE es PIXELS_PER_METER (50px)
+        const startXMeter = Math.floor((-panX / (GRID_SIZE * currentScale))) ;
+        const endXMeter = Math.ceil((STAGE_WIDTH - panX) / (GRID_SIZE * currentScale)) ;
+        
+        for (let m = 0; m <= totalMetersX; m++) {
+            const xPosPxScaled = (m * GRID_SIZE) * currentScale + panX;
+            
+            // Asegurar que la marca esté visible dentro del rango de la regla
+            if (xPosPxScaled >= 0 && xPosPxScaled <= STAGE_WIDTH) {
+                 // Solo dibujar números en marcas principales (metros enteros)
+                if (m % 1 === 0) { 
+                    const tick = document.createElement('div');
+                    tick.className = 'ruler-tick';
+                    tick.style.left = (xPosPxScaled) + 'px';
+                    tick.innerHTML = `${m}m`;
+                    rulerBottomEl.appendChild(tick);
+                }
             }
-        });
+        }
+
+        // Regla Vertical (Eje Y)
+        const totalMetersTopToBottom = STAGE_HEIGHT_M;
+        
+        for (let m = 0; m <= totalMetersY; m++) {
+            const yPosPxScaled = (m * GRID_SIZE) * currentScale + panY;
+            
+            // Asegurar que la marca esté visible dentro del rango de la regla
+            if (yPosPxScaled >= 0 && yPosPxScaled <= STAGE_HEIGHT) {
+                 // Solo dibujar números en marcas principales (metros enteros)
+                 // Nota: El eje Y comienza en la parte superior (0m). 
+                 // totalMetersTopToBottom - m da la distancia desde el fondo del escenario (el 0m del plano se entiende como la parte de atrás del escenario).
+                if (m % 1 === 0) { 
+                    const tick = document.createElement('div');
+                    tick.className = 'ruler-tick';
+                    tick.style.top = (yPosPxScaled) + 'px'; 
+                    tick.innerHTML = `${totalMetersTopToBottom - m}m`;
+                    rulerLeftEl.appendChild(tick);
+                }
+            }
+        }
     }
 
-    // ----------------------------------------------------
-    // DIBUJO DE CUADRÍCULA Y COTAS 📏 
-    // ----------------------------------------------------
 
     function drawGridAndFrame() {
+        // Al dibujar la cuadrícula, solo destruir elementos que NO son movibles
         layer.children.forEach(child => {
             if (child.name() !== 'movable-group') {
                 child.destroy();
             }
-        }); 
-        
-        document.getElementById('ruler-bottom').innerHTML = '';
-        document.getElementById('ruler-left').innerHTML = '';
+        });
 
         // 1. Dibujar el marco del escenario
+        // ESTE DEBE SER EL PRIMERO EN AÑADIRSE PARA ESTAR EN EL FONDO ABSOLUTO
         const frame = new Konva.Rect({
-            x: 0, y: 0, width: STAGE_WIDTH, height: STAGE_HEIGHT,
-            stroke: '#1a237e', strokeWidth: 3, fill: '#ffffff',
+            x: 0,
+            y: 0,
+            width: STAGE_WIDTH,
+            height: STAGE_HEIGHT,
+            stroke: '#1a237e',
+            strokeWidth: 3,
+            fill: '#ffffff',
             name: 'stage-frame'
         });
         layer.add(frame);
-        frame.moveToBottom(); 
+        // frame.moveToBottom(); <-- ELIMINADO para evitar invertir el Z-index
 
-        const rulerBottomEl = document.getElementById('ruler-bottom');
-        const rulerLeftEl = document.getElementById('ruler-left');
-        
-        // 2. Regla Horizontal (Eje X: Ancho, -8m a +8m)
-        const totalMetersX = STAGE_WIDTH / GRID_SIZE; 
-        const halfWidth = totalMetersX / 2;
+        // 2. Dibujar la cuadrícula (visible por defecto)
+        const totalMetersX = STAGE_WIDTH / GRID_SIZE;
+        const totalMetersY = STAGE_HEIGHT / GRID_SIZE;
 
         for (let i = 0; i <= totalMetersX; i++) {
             const xPos = i * GRID_SIZE;
-            layer.add(new Konva.Line({ points: [xPos, 0, xPos, STAGE_HEIGHT], stroke: '#e0e0e0', strokeWidth: 1, name: 'grid-line' }));
-            
-            const metros = i - halfWidth;
-            if (i % 2 === 0 || metros === 0) { 
-                const tick = document.createElement('div');
-                tick.className = 'ruler-tick';
-                tick.style.left = (xPos - 5) + 'px'; 
-                tick.style.borderLeft = (metros === 0 ? '2px' : '1px') + ' solid #333333';
-                tick.innerHTML = `${metros}m`;
-                rulerBottomEl.appendChild(tick);
-            }
+            const line = new Konva.Line({
+                points: [xPos, 0, xPos, STAGE_HEIGHT],
+                stroke: '#e0e0e0',
+                strokeWidth: 1,
+                name: 'grid-line',
+                visible: true
+            });
+            layer.add(line); // Añadido después del marco, por lo tanto, visible encima del fondo blanco.
+            // line.moveToBottom(); <-- ELIMINADO
         }
-
-        // 3. Regla Vertical (Eje Y: Profundidad, 0m ABAJO a 10m ARRIBA)
-        const totalMetersY = STAGE_HEIGHT / GRID_SIZE; 
-
         for (let j = 0; j <= totalMetersY; j++) {
             const yPos = j * GRID_SIZE;
-            layer.add(new Konva.Line({
+            const line = new Konva.Line({
                 points: [0, yPos, STAGE_WIDTH, yPos],
                 stroke: '#e0e0e0',
                 strokeWidth: 1,
-                name: 'grid-line'
-            }));
-            
-            // Lógica de inversión para que 0m esté ABAJO (y=500px)
-            const metros = totalMetersY - j; 
-
-            const tick = document.createElement('div');
-            tick.className = 'ruler-tick';
-            tick.style.top = (yPos) + 'px'; 
-            tick.innerHTML = `${metros}m`;
-            rulerLeftEl.appendChild(tick);
+                name: 'grid-line',
+                visible: true
+            });
+            layer.add(line); // Añadido después del marco y las líneas X.
+            // line.moveToBottom(); <-- ELIMINADO
         }
-        
+
+        // 3. Dibujar las cotas (Rulers)
+        updateRulers(stage.scaleX(), stage.position());
         layer.draw();
     }
-    
+
+
     // ----------------------------------------------------
-    // LÓGICA RIDER (Listas, Eliminación, Secuencia y ARRASTRAR)
+    // LÓGICA RIDER (Listas y Canales)
     // ----------------------------------------------------
 
     /**
-     * Revisa las tablas de Input y Output, y renombra las filas CH/Mix desde 1.
+     * Renúmera los canales/mixes de una lista (Input o Output) y actualiza contadores.
+     * También actualiza las etiquetas Konva si el número de canal/mix ha cambiado.
      */
-    function renumerarCanales() {
+    function renumerarCanales(listType = null) {
         let nuevoCanalActual = 0;
         let nuevaSalidaActual = 0;
 
-        // 1. Renumerar Input List
-        const inputRows = document.querySelectorAll('#lista-canales-body tr');
-        inputRows.forEach((row, index) => {
-            const chInput = row.querySelector('.ch-input');
-            if (chInput) {
-                chInput.value = index + 1;
-            }
-        });
-        nuevoCanalActual = inputRows.length;
+        if (listType === 'input' || listType === null) {
+            const inputRows = document.querySelectorAll('#lista-canales-body tr');
+            inputRows.forEach((row, index) => {
+                const chInput = row.querySelector('.ch-input');
+                if (chInput) {
+                    const oldCh = chInput.value;
+                    const newCh = index + 1;
+                    
+                    if (oldCh != newCh) {
+                        chInput.value = newCh; // Actualizar el valor del input
+                        // Si el canal cambió, actualizar la etiqueta Konva para que refleje el nuevo número
+                        const idVinculacion = row.getAttribute('data-id-vinculacion');
+                        const sourceInput = row.querySelector('input[data-label-tipo="source"]');
+                        if (sourceInput) {
+                            // Usar updateKonvaLabelFromTable para reconstruir la etiqueta correctamente
+                            updateKonvaLabelFromTable(idVinculacion, sourceInput.value); 
+                        }
+                    }
+                }
+            });
+            nuevoCanalActual = inputRows.length;
+            canalActual = nuevoCanalActual;
+        }
 
-        // 2. Renumerar Output List
-        const outputRows = document.querySelectorAll('#lista-salidas-body tr');
-        outputRows.forEach((row, index) => {
-            const mixInput = row.querySelector('.ch-input');
-            if (mixInput) {
-                mixInput.value = index + 1;
-            }
-        });
-        nuevaSalidaActual = outputRows.length;
+        if (listType === 'output' || listType === null) {
+            const outputRows = document.querySelectorAll('#lista-salidas-body tr');
+            outputRows.forEach((row, index) => {
+                const chInput = row.querySelector('.ch-input');
+                if (chInput) {
+                    const oldCh = chInput.value;
+                    const newCh = index + 1;
+                    
+                    if (oldCh != newCh) {
+                        chInput.value = newCh; // Actualizar el valor del input
+                        // Si el mix cambió, actualizar la etiqueta Konva
+                        const idVinculacion = row.getAttribute('data-id-vinculacion');
+                        const destinationInput = row.querySelector('input[data-label-tipo="dest"]');
+                        if (destinationInput) {
+                            // Usar updateKonvaLabelFromTable para reconstruir la etiqueta correctamente
+                            updateKonvaLabelFromTable(idVinculacion, destinationInput.value); 
+                        }
+                    }
+                }
+            });
+            nuevaSalidaActual = outputRows.length;
+            salidaActual = nuevaSalidaActual;
+        }
 
-        // 3. Actualizar contadores globales
-        canalActual = nuevoCanalActual;
-        salidaActual = nuevaSalidaActual;
-        
-        // Guardar el estado después de renumerar
         saveStateSilencioso();
     }
 
-    function getNextAvailableChannel(listaTipo) {
-        // Esta función ahora solo devuelve el valor actual de la variable global + 1
-        if (listaTipo === 'input') {
-            return canalActual + 1;
-        } else {
-            return salidaActual + 1;
-        }
-    }
 
-
-    window.agregarFilaCanal = function(numero, tipo, idVinculacion, nombrePorDefecto, listaTipo) {
-        const tbody = document.getElementById(listaTipo === 'input' ? 'lista-canales-body' : 'lista-salidas-body');
-        
-        const newRow = tbody.insertRow();
+    /**
+     * Crea un nuevo <tr> (fila de tabla) sin insertarla en el DOM.
+     * Retorna el elemento de fila para su posterior inserción.
+     */
+    function crearFilaHTML(numero, tipo, idVinculacion, nombrePorDefecto, listaTipo) {
+        const newRow = document.createElement('tr');
         newRow.setAttribute('data-id-vinculacion', idVinculacion);
-        newRow.setAttribute('draggable', 'true'); 
-        newRow.setAttribute('data-list-type', listaTipo); 
+        newRow.setAttribute('draggable', 'true');
+        newRow.setAttribute('data-list-type', listaTipo);
 
-        // Usamos index + 1 como número temporal, luego renumeramos
-        const chInputHTML = `<input type="number" class="cell-input ch-input" value="${numero}" min="1" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()">`;
+        // onchange llama a updateKonvaLabelFromTable para reconstruir la etiqueta con el nuevo número de canal
+        const chInputHTML = `<input type="number" class="cell-input ch-input" value="${numero}" min="1" onchange="updateKonvaLabelFromTable('${idVinculacion}', this.value); renumerarCanales('${listaTipo}')" onkeyup="saveStateSilencioso()">`;
+        
+        // Limpiar el nombre de cualquier marcador de canal para el input de la tabla
+        const sourceInputName = nombrePorDefecto.replace(/ \(Ch \d+\)/i, '').replace(/ \(Mix \d+\)/i, '').trim();
 
         if (listaTipo === 'input') {
             newRow.innerHTML = `
                 <td>${chInputHTML}</td>
-                <td><input type="text" class="cell-input" value="${nombrePorDefecto}" data-label-tipo="source" onchange="updateKonvaLabel('${idVinculacion}', this.value)" onkeyup="saveStateSilencioso()"></td>
+                <td><input type="text" class="cell-input" value="${sourceInputName}" data-label-tipo="source" onchange="updateKonvaLabelFromTable('${idVinculacion}', this.value)" onkeyup="saveStateSilencioso()"></td>
                 <td><input type="text" class="cell-input" value="${tipo === 'microfono' ? 'SM57' : (tipo === 'cajadi' ? 'DI' : '')}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><input type="text" class="cell-input" value="" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><button class="btn-eliminar" onclick="eliminarFila('${idVinculacion}')">X</button></td>
             `;
-        } else {
-             newRow.innerHTML = `
+        } else { // listaTipo === 'output'
+            newRow.innerHTML = `
                 <td>${chInputHTML}</td>
-                <td><input type="text" class="cell-input" value="${nombrePorDefecto}" data-label-tipo="dest" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
-                <td><input type="text" class="cell-input" value="" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
+                <td><input type="text" class="cell-input" value="${sourceInputName}" data-label-tipo="dest" onchange="updateKonvaLabelFromTable('${idVinculacion}', this.value)" onkeyup="saveStateSilencioso()"></td>
+                <td><input type="text" class="cell-input" value="${tipo === 'monitor' ? 'Mon. Cuña' : (tipo === 'receptor_iem' ? 'IEM TX' : '')}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><button class="btn-eliminar" onclick="eliminarFila('${idVinculacion}')">X</button></td>
             `;
         }
         
-        attachDragEventsToRow(newRow); 
-        // No llamamos a saveStateSilencioso aquí, lo hace renumerarCanales
-    }
-    
-    window.updateKonvaLabel = function(idVinculacion, newText) {
-        const konvaElement = layer.find(`.movable-group[data_id_vinculacion="${idVinculacion}"]`)[0];
-        if (konvaElement) {
-            const label = konvaElement.children.find(c => c.name() === 'icon-label');
-            if (label) {
-                label.text(newText);
-                const parentGroup = label.getParent();
-                if (parentGroup) {
-                    // Usamos la escala actual del grupo para el ajuste
-                    const groupWidth = parentGroup.width() * parentGroup.scaleX();
-                    const groupHeight = parentGroup.height() * parentGroup.scaleY();
-                    
-                    label.x(groupWidth / 2);
-                    label.y(-label.height() - 5);
-                    label.offsetX(label.width() / 2);
-                }
-                layer.draw();
-                saveStateSilencioso();
-            }
-        }
+        attachDragEventsToRow(newRow);
+        return newRow;
     }
 
+
+    /**
+     * Inserta la fila en la posición del canal solicitado, moviendo la fila existente si es necesario.
+     * @param {string} listType - 'input' o 'output'.
+     * @param {string} dataType - Tipo de elemento (mic, monitor, etc).
+     * @param {string} idVinculacion - ID del elemento Konva.
+     * @param {string} cleanLabel - Etiqueta sin (Ch X) o (Mix X).
+     * @param {number} requestedChannel - Canal solicitado (0 para el siguiente libre).
+     */
+    function insertarFilaEnCanal(listType, dataType, idVinculacion, cleanLabel, requestedChannel = 0) {
+        const tbodyId = listType === 'input' ? 'lista-canales-body' : 'lista-salidas-body';
+        const tbody = document.getElementById(tbodyId);
+        let targetIndex = -1;
+
+        if (requestedChannel > 0) {
+             // 1. Verificar si ya existe una fila en el canal solicitado
+            const existingRow = tbody.querySelector(`tr:nth-child(${requestedChannel})`);
+            
+            if (existingRow) {
+                // Si existe, la movemos al final. Esto liberará la posición.
+                tbody.appendChild(existingRow); 
+                targetIndex = requestedChannel - 1; // La nueva fila irá a esta posición
+            } else {
+                // Si no existe, usamos el canal solicitado.
+                targetIndex = requestedChannel - 1;
+            }
+        } else {
+            // 2. Si no se solicitó canal, añadir al final.
+            targetIndex = tbody.rows.length;
+        }
+        
+        // Asegurar que el índice no sea negativo y esté dentro de los límites
+        targetIndex = Math.max(0, targetIndex);
+        targetIndex = Math.min(targetIndex, tbody.rows.length);
+
+
+        // 3. Crear la nueva fila HTML. 
+        // Nota: El número de canal en la fila creada será temporal, se corregirá con renumerarCanales.
+        const newRow = crearFilaHTML(targetIndex + 1, dataType, idVinculacion, cleanLabel, listType);
+
+        // 4. Insertar la nueva fila en la posición correcta (Índice 0-based)
+        if (targetIndex < tbody.rows.length) {
+            tbody.insertBefore(newRow, tbody.rows[targetIndex]);
+        } else {
+            tbody.appendChild(newRow);
+        }
+
+        // 5. Renumerar TODA la lista para corregir canales y contadores.
+        renumerarCanales(listType);
+    }
+    
+    /**
+     * Actualiza la etiqueta Konva cuando se edita en la tabla (Input/Output Name o Channel Number).
+     * @param {string} idVinculacion - ID del elemento Konva.
+     * @param {string} rawInputText - El valor del input de la tabla (Source/Destination).
+     */
+    window.updateKonvaLabelFromTable = function(idVinculacion, rawInputText) {
+        const konvaElement = layer.find(`.movable-group[data_id_vinculacion="${idVinculacion}"]`)[0];
+        if (!konvaElement) return;
+
+        const label = konvaElement.children.find(c => c.name() === 'icon-label');
+        if (!label) return;
+
+        // 1. Obtener el número de canal/mix actual de la tabla
+        const row = document.querySelector(`tr[data-id-vinculacion="${idVinculacion}"]`);
+        if (!row) return;
+
+        const finalChannelNumber = row.querySelector('.ch-input').value;
+        const listType = row.getAttribute('data-list-type');
+
+        // 2. Limpiar el texto de cualquier referencia a canal/mix que pudiera haber
+        // Se usa el valor de la tabla que ya fue limpiado por la función de la tabla
+        const cleanLabel = rawInputText.replace(/(ch|can|mix|out|mon)\s*\d+/i, '').replace(/[\(\)\[\]\{\}]/g, '').trim();
+        
+        // 3. Reconstruir la etiqueta con el número de canal/mix
+        const prefix = listType === 'input' ? 'Ch' : 'Mix';
+        // La etiqueta final en Konva siempre usa el formato (Ch X) o (Mix X)
+        const finalLabel = `${cleanLabel} (${prefix} ${finalChannelNumber})`;
+
+        label.text(finalLabel);
+        
+        // Recalcular posición de la etiqueta
+        const parentGroup = label.getParent();
+        if (parentGroup) {
+            const groupWidth = parentGroup.width() * parentGroup.scaleX();
+            // Para iconos centrados, usar el centro del grupo (que es (0,0) con el offset aplicado)
+            label.x(0); 
+            label.y(-label.height() - 5);
+            label.offsetX(label.width() / 2);
+        }
+
+        layer.draw();
+        saveStateSilencioso();
+    }
+
+    /**
+     * **CORRECCIÓN CLAVE**
+     * * Actualiza el campo "Source" en la tabla cuando se edita el texto en el plano Konva.
+     * Reordena la lista si el usuario especificó un canal (Ch X).
+     * * @param {string} idVinculacion - ID del elemento Konva.
+     * @param {string} rawText - El texto del label de Konva, que puede contener "mic ch5".
+     */
+    window.updateTableSourceLabelFromKonva = function(idVinculacion, rawText) {
+        // 1. Limpiar el texto y extraer canal/mix.
+        const { cleanLabel, number: requestedChannel, listType: extractedListType } = extractChannelNumber(rawText);
+        
+        // 2. Encontrar la fila y el elemento Konva
+        const row = document.querySelector(`tr[data-id-vinculacion="${idVinculacion}"]`);
+        const konvaElement = layer.find(`.movable-group[data_id_vinculacion="${idVinculacion}"]`)[0];
+        
+        if (!row || !konvaElement) return;
+
+        const rowListType = row.getAttribute('data-list-type');
+        const inputField = row.querySelector(`input[data-label-tipo="${rowListType === 'input' ? 'source' : 'dest'}"]`);
+
+        if (inputField) {
+            // 3. Update the source name in the table with the clean label
+            inputField.value = cleanLabel; 
+
+            // 4. Reordering logic: only if a channel was requested and the type matches.
+            if (requestedChannel > 0 && extractedListType === rowListType) {
+                const currentChannel = parseInt(row.querySelector('.ch-input').value);
+                
+                if (requestedChannel !== currentChannel) {
+                    // Reorder the list by re-inserting the row
+                    insertarFilaEnCanal(rowListType, konvaElement.getAttr('data_type'), idVinculacion, cleanLabel, requestedChannel);
+                    showToast(`➡️ Elemento movido al canal ${requestedChannel}.`, 'info');
+                    return; // Reordering calls saveState and updates Konva label, so we exit.
+                }
+            }
+        }
+        
+        // 5. If no reordering, or if the source name changed but the channel didn't:
+        // Update the Konva label to reflect the *correct* (Ch X) format based on the table's current channel.
+        updateKonvaLabelFromTable(idVinculacion, cleanLabel); 
+        
+        saveStateSilencioso();
+    }
+
+
     window.agregarFilaManual = function(listaTipo) {
-        // Usamos un número temporal (1, por ejemplo) ya que renumerarCanales lo corregirá
-        const numeroDummy = 1; 
         const idVinculacion = `manual-${Date.now()}`;
-        const nombrePorDefecto = listaTipo === 'input' ? 'Input Manual' : 'Output Manual';
+        const nombrePorDefecto = listaTipo === 'input' ? 'Elemento Manual' : `Mix Manual`;
         
-        agregarFilaCanal(numeroDummy, 'manual', idVinculacion, nombrePorDefecto, listaTipo); 
-        
-        renumerarCanales(); // <-- ¡IMPORTANTE! Asigna el número CH/Mix correcto (último + 1)
+        // Llama a la nueva función de inserción, solicitando canal 0 (siguiente libre)
+        insertarFilaEnCanal(listaTipo, 'manual', idVinculacion, nombrePorDefecto, 0); 
+        showToast(`✏️ Fila manual añadida a la lista de ${listaTipo === 'input' ? 'Canales' : 'Salidas'}.`, 'success');
     }
 
     window.eliminarFila = function(idVinculacion) {
-        document.querySelectorAll(`tr[data-id-vinculacion="${idVinculacion}"]`).forEach(row => row.remove());
+        // Eliminar fila de Input List
+        let row = document.querySelector(`#lista-canales-body tr[data-id-vinculacion="${idVinculacion}"]`);
+        let listType = 'input';
+        
+        if (!row) {
+            // Si no está en Input List, buscar en Output List
+            row = document.querySelector(`#lista-salidas-body tr[data-id-vinculacion="${idVinculacion}"]`);
+            listType = 'output';
+        }
+        
+        if (row) {
+            row.remove();
+            // Re-numerar la lista afectada
+            renumerarCanales(listType);
+            showToast(`🗑️ Fila eliminada de la lista de ${listType === 'input' ? 'Canales' : 'Salidas'}.`, 'info');
+        }
 
+        // Eliminar elemento de Konva si existe y no es manual
         const konvaElement = layer.find(`.movable-group[data_id_vinculacion="${idVinculacion}"]`)[0];
-        if (konvaElement) {
+        if (konvaElement && konvaElement.getAttr('data_type') !== 'manual') {
             konvaElement.destroy();
-            removeTransformer(); 
+            removeTransformer();
             layer.draw();
         }
         
-        renumerarCanales(); // <-- ¡NUEVO! Vuelve a numerar desde 1 y actualiza los contadores
+        saveStateSilencioso();
     }
-    
-    // Implementación de Drag and Drop para filas de tablas
+
+
+    // --- Drag and Drop de Filas (Reordenamiento) ---
     let draggedRow = null;
 
     function attachDragEventsToRow(row) {
-        row.addEventListener('dragstart', (e) => {
+        row.addEventListener('dragstart', function (e) {
             draggedRow = row;
             e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', row.getAttribute('data-id-vinculacion'));
-            setTimeout(() => row.classList.add('dragging'), 0);
+            row.classList.add('dragging');
         });
 
-        row.addEventListener('dragenter', (e) => {
-            e.preventDefault();
-            if (e.target.closest('tr') && e.target.closest('tr') !== draggedRow) {
-                e.target.closest('tr').classList.add('drag-over');
-            }
-        });
-
-        row.addEventListener('dragover', (e) => {
-            e.preventDefault(); 
-            e.dataTransfer.dropEffect = 'move';
-        });
-
-        row.addEventListener('dragleave', (e) => {
-            e.target.closest('tr').classList.remove('drag-over');
-        });
-
-        row.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const targetRow = e.target.closest('tr');
-            
-            if (draggedRow && targetRow && draggedRow !== targetRow) {
-                const targetTbody = targetRow.parentNode;
-                const draggedTbody = draggedRow.parentNode;
-
-                // Asegurar que el arrastre sea solo dentro de la misma tabla
-                if (targetTbody === draggedTbody) {
-                    const rect = targetRow.getBoundingClientRect();
-                    const nextTo = (e.clientY > rect.top + rect.height / 2) ? targetRow.nextSibling : targetRow;
-                    
-                    if (nextTo) {
-                        targetTbody.insertBefore(draggedRow, nextTo);
-                    } else {
-                        targetTbody.appendChild(draggedRow);
-                    }
-                    renumerarCanales(); // <-- ¡NUEVO! Renumera después del reordenamiento
-                }
-            }
-            targetRow.classList.remove('drag-over');
-        });
-
-        row.addEventListener('dragend', () => {
+        row.addEventListener('dragend', function () {
             draggedRow.classList.remove('dragging');
             draggedRow = null;
-            document.querySelectorAll('.drag-over').forEach(r => r.classList.remove('drag-over'));
-            saveStateSilencioso(); 
+            renumerarCanales(row.getAttribute('data-list-type'));
+            showToast('♻️ Listas reordenadas.', 'info');
+        });
+
+        row.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            const boundingBox = row.getBoundingClientRect();
+            const offset = boundingBox.y + (boundingBox.height / 2);
+            
+            if (draggedRow && draggedRow.parentNode === row.parentNode) {
+                if (e.clientY < offset) {
+                    row.parentNode.insertBefore(draggedRow, row);
+                } else {
+                    row.parentNode.insertBefore(draggedRow, row.nextSibling);
+                }
+            }
         });
     }
 
     function attachDragEvents() {
-        document.querySelectorAll('#lista-canales-body tr, #lista-salidas-body tr').forEach(row => {
-            attachDragEventsToRow(row);
-        });
-        
-        // Re-adjuntar listener para inputs CH/Mix
-        document.querySelectorAll('.ch-input').forEach(input => {
-            input.addEventListener('change', saveStateSilencioso);
-            input.addEventListener('keyup', saveStateSilencioso);
-        });
+        document.querySelectorAll('.rider-table tbody tr').forEach(attachDragEventsToRow);
     }
-
-
+    
     // ----------------------------------------------------
     // UTILIDADES (Acordeón, Vistas, Exportación)
     // ----------------------------------------------------
 
     window.toggleAcordeon = function(header) {
         const content = header.nextElementSibling;
-        
+
+        // Cerrar todos excepto el que se va a abrir (o el que ya está abierto)
         document.querySelectorAll('.categoria-contenido').forEach(c => {
             if (c !== content && c.classList.contains('abierto')) {
                 c.classList.remove('abierto');
@@ -1370,190 +1981,449 @@
             content.style.maxHeight = null;
         } else {
             content.classList.add('abierto');
+            // Usar scrollHeight para calcular la altura dinámicamente
             content.style.maxHeight = content.scrollHeight + "px";
         }
     };
-    
-    window.setView = function(view) { 
+
+    /**
+     * Gestiona la vista activa (Stage Plot, Listas o Rider de Necesidades).
+     */
+    window.setView = function(view) {
         currentView = view;
         const mainWorkspace = document.getElementById('main-workspace');
-        const riderContainer = document.getElementById('rider-container');
-        const btnStagePlot = document.getElementById('btn-stageplot');
-        const btnRider = document.getElementById('btn-rider');
+        const riderListsContainer = document.getElementById('rider-lists-container');
+        const needsRiderEditorContainer = document.getElementById('needs-rider-editor-container');
+        const allButtons = [
+            document.getElementById('btn-stageplot'),
+            document.getElementById('btn-rider'),
+            document.getElementById('btn-needs-rider')
+        ];
 
-        btnStagePlot.classList.remove('active');
-        btnRider.classList.remove('active');
-        
+        allButtons.forEach(btn => btn.classList.remove('active'));
+
+        // Ocultar todos los contenedores principales de trabajo
+        mainWorkspace.style.display = 'none';
+        riderListsContainer.style.display = 'none';
+        needsRiderEditorContainer.style.display = 'none';
+
+        // Mostrar el contenedor y activar el botón de la vista seleccionada
         if (view === 'stagePlot') {
             mainWorkspace.style.display = 'flex';
-            riderContainer.classList.remove('visible');
-            btnStagePlot.classList.add('active'); 
-        } else {
-            mainWorkspace.style.display = 'none';
-            riderContainer.classList.add('visible');
-            btnRider.classList.add('active'); 
+            document.getElementById('btn-stageplot').classList.add('active');
+            // Recalcular cotas en caso de que se haya redimensionado la ventana mientras se estaba en otra vista
+            updateRulers(stage.scaleX(), stage.position()); 
+        } else if (view === 'rider') {
+            riderListsContainer.style.display = 'block';
+            document.getElementById('btn-rider').classList.add('active');
+        } else if (view === 'needsRider') {
+            needsRiderEditorContainer.style.display = 'block';
+            document.getElementById('btn-needs-rider').classList.add('active');
         }
     }
-    
+
+
+    /**
+     * Función utilitaria para obtener el HTML formateado de las listas del Rider.
+     */
+    function getRiderListHTML(includeNeedsRider = false) {
+        const inputListBody = document.getElementById('lista-canales-body').innerHTML;
+        const outputListBody = document.getElementById('lista-salidas-body').innerHTML;
+        
+        // Reemplazar los inputs por su valor de texto para la exportación
+        const sanitizeTableHTML = (bodyHTML) => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = `<table><tbody>${bodyHTML}</tbody></table>`;
+            
+            // Eliminar la columna de Acción (último <td>)
+            tempDiv.querySelectorAll('tr').forEach(row => {
+                const lastCell = row.lastElementChild;
+                if (lastCell && lastCell.querySelector('.btn-eliminar')) {
+                    row.removeChild(lastCell);
+                }
+            });
+
+            // Reemplazar todos los <input> por el valor de su atributo 'value'
+            tempDiv.querySelectorAll('input').forEach(input => {
+                const textNode = document.createTextNode(input.value);
+                input.parentNode.replaceChild(textNode, input);
+            });
+            
+            return tempDiv.querySelector('tbody').innerHTML;
+        };
+
+        let riderHtmlContent = "";
+        
+        if (inputListBody.trim()) {
+            riderHtmlContent += `
+                <h3 class="rider-section-title">Lista de Canales (Input List) 🎤</h3>
+                <table class="rider-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">CH</th>
+                            <th style="width: 30%;">Fuente (Stage Plot Label)</th>
+                            <th style="width: 25%;">Mic/DI Sugerido</th>
+                            <th style="width: 40%;">Preamp / Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sanitizeTableHTML(inputListBody)}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        if (outputListBody.trim()) {
+            riderHtmlContent += `
+                <h3 class="rider-section-title">Lista de Salidas (Output/Mix List) 🎧</h3>
+                <table class="rider-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">Mix</th>
+                            <th style="width: 45%;">Destino</th>
+                            <th style="width: 50%;">Notas / Eq</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sanitizeTableHTML(outputListBody)}
+                    </tbody
+                </table>
+            `;
+        }
+        
+        let needsRiderContent = "";
+        if (includeNeedsRider && quill) {
+             needsRiderContent = quill.root.innerHTML;
+             if (needsRiderContent.trim() && needsRiderContent.trim() !== '<p><br></p>') {
+                riderHtmlContent += `
+                    <h3 class="rider-section-title">Rider de Necesidades Adicionales 📝</h3>
+                    <div style="padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff;">
+                        ${needsRiderContent}
+                    </div>
+                `;
+            }
+        }
+        
+        return riderHtmlContent;
+    }
+
+    /**
+     * Función utilitaria para descargar archivos.
+     */
+    function downloadFile(content, fileName, mimeType) {
+        const a = document.createElement('a');
+        a.href = 'data:' + mimeType + ',' + encodeURIComponent(content);
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // ----------------------------------------------------
+    // EXPORTACIÓN A HTML (Plano + Listas)
+    // ----------------------------------------------------
+
+    window.exportarPlanoYListasHTML = function() {
+        removeTransformer();
+        const titleText = headerTitleElement.textContent || "Stage Plot y Rider Técnico";
+        
+        // 1. Obtener la imagen del Stage Plot sin la cuadrícula
+        const gridLines = layer.find('.grid-line');
+        gridLines.forEach(line => line.visible(false));
+        layer.draw(); // Dibujar sin cuadrícula
+        const stageDataURL = stage.toDataURL({ 
+            mimeType: 'image/png', 
+            quality: 1.0, 
+            pixelRatio: 2 // Alta resolución
+        }); 
+        gridLines.forEach(line => line.visible(true));
+        layer.draw(); // Restaurar la cuadrícula
+
+        // 2. Obtener el HTML del Rider (incluyendo necesidades)
+        const riderHtmlContent = getRiderListHTML(true);
+        
+        // 3. Estilos CSS para el HTML exportado
+        const cssStyles = `
+             :root { --color-primary: #1a237e; } 
+             body { font-family: 'Arial', sans-serif; margin: 20px; color: #333; } 
+             .rider-table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 30px; } 
+             .rider-table th, .rider-table td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 14px; } 
+             .rider-table th { background-color: var(--color-primary); color: white; } 
+             .rider-section-title { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); padding-bottom: 5px; margin-top: 35px; margin-bottom: 15px; font-size: 1.5em; } 
+             .stage-plot-container { max-width: 900px; height: 600px; margin: 20px auto; border: 3px solid #1a237e; box-shadow: 0 4px 10px rgba(0,0,0,0.1); } 
+             @media print { .stage-plot-container { page-break-after: always; } } 
+         `;
+
+        // 4. Combinar todo en un único archivo HTML
+        const fullHTMLContent = `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>${titleText} - Stage Plot y Rider Técnico</title>
+                <style>
+                    ${cssStyles}
+                </style>
+            </head>
+            <body>
+                <h1 style="font-size: 1.8em; font-weight: 700; text-align: center; color: #1a237e; border-bottom: 3px solid #1a237e; padding-bottom: 12px; margin-bottom: 35px; width: 100%;">STAGE PLOT: ${titleText}</h1>
+                
+                <div class="stage-plot-container">
+                    <img src="${stageDataURL}" alt="Stage Plot" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                
+                ${riderHtmlContent}
+                
+                <p style="margin-top: 50px; font-size: 0.8em; color: #555;">Documento generado el ${new Date().toLocaleDateString('es-ES')}.</p>
+            </body>
+            </html>
+        `;
+
+        downloadFile(fullHTMLContent, titleText + "_Plano_y_Rider.html", 'text/html;charset=utf-8;');
+        showToast('✅ Documento (Plano y Listas) exportado.', 'success');
+    }
+
+    // ----------------------------------------------------
+    // EXPORTACIÓN A PDF (Solo Plano)
+    // ----------------------------------------------------
+
+    /**
+     * Función: Genera el Stage Plot como PDF.
+     */
     window.generarStagePlotPDF = function() {
         removeTransformer();
-        const stageDataURL = stage.toDataURL({ mimeType: 'image/png', quality: 1.0, pixelRatio: 2 });
-        const pdf = new jsPDF('l', 'mm', 'a4'); 
+        const titleText = headerTitleElement.textContent || "Stage Plot";
+
+        // 1. Ocultar la cuadrícula temporalmente
+        const gridLines = layer.find('.grid-line');
+        gridLines.forEach(line => line.visible(false));
+        layer.draw(); // Redibujar la capa sin la cuadrícula
+
+        const stageDataURL = stage.toDataURL({ 
+            mimeType: 'image/png', 
+            quality: 1.0, 
+            pixelRatio: 2 
+        }); // Alta resolución
+
+        // 2. Restaurar la cuadrícula
+        gridLines.forEach(line => line.visible(true));
+        layer.draw(); // Restaurar la cuadrícula en el lienzo
+
+        const pdf = new jsPDF('l', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-        const padding = 10; 
-        const ratio = STAGE_WIDTH / STAGE_HEIGHT;
+        const padding = 10;
+        const ratio = STAGE_WIDTH / STAGE_HEIGHT; 
+        
+        // Calcular dimensiones para que encaje el Stage Plot en el PDF
         let imgWidth = pdfWidth - 2 * padding;
         let imgHeight = imgWidth / ratio;
+        
         if (imgHeight > pdfHeight - 2 * padding) {
             imgHeight = pdfHeight - 2 * padding;
             imgWidth = imgHeight * ratio;
         }
-        const x = (pdfWidth - imgWidth) / 2;
-        const y = (pdfHeight - imgHeight) / 2;
-        pdf.addImage(stageDataURL, 'PNG', x, y, imgWidth, imgHeight);
-        const title = headerTitleInput.value || "Stage_Plot";
-        pdf.save(title.replace(/\s/g, '_') + "_Plot.pdf");
-    }
-    
-    /** * Función: Exporta solo las tablas de Input y Output.
-     */
-    window.generarListasPDF = function() {
-        const originalView = currentView;
-        setView('rider'); 
 
-        // Clonamos solo los elementos necesarios
-        const tempContainer = document.createElement('div');
-        tempContainer.style.width = '800px'; 
-        tempContainer.style.padding = '25px';
-        tempContainer.style.backgroundColor = 'white';
+        const xPos = (pdfWidth - imgWidth) / 2;
+        const yPos = (pdfHeight - imgHeight) / 2;
 
-        const headerClone = document.getElementById('header-documento').cloneNode(true);
-        tempContainer.appendChild(headerClone);
-        
-        const inputTitleClone = document.querySelector('.rider-section-title:nth-of-type(2)').cloneNode(true); 
-        tempContainer.appendChild(inputTitleClone);
-        const inputTableClone = document.getElementById('input-list-table').cloneNode(true); 
-        tempContainer.appendChild(inputTableClone);
-        
-        const outputTitleClone = document.querySelector('.rider-section-title:nth-of-type(3)').cloneNode(true);
-        tempContainer.appendChild(outputTitleClone);
-        const outputTableClone = document.getElementById('output-list-table').cloneNode(true); 
-        tempContainer.appendChild(outputTableClone);
+        // Título
+        pdf.setFontSize(18);
+        pdf.setTextColor(26, 35, 126); // var(--color-primary)
+        pdf.text("STAGE PLOT: " + titleText, pdfWidth / 2, padding + 5, { align: 'center' });
 
-        document.body.appendChild(tempContainer);
+        // Imagen
+        pdf.addImage(stageDataURL, 'PNG', xPos, yPos, imgWidth, imgHeight);
         
-        html2canvas(tempContainer, {
-            scale: 2, useCORS: true, allowTaint: true,
-        }).then(canvas => {
-            document.body.removeChild(tempContainer); 
-            
-            const imgData = canvas.toDataURL('image/jpeg', 0.9);
-            const imgWidth = 210; 
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            
-            const pdf = new jsPDF('p', 'mm', 'a4'); 
-            pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-            
-            setView(originalView); 
-            
-            let title = headerTitleInput.value || "Rider_Listas";
-            if (title.length > 50) { 
-                title = title.substring(0, 50) + '...';
-            }
-            pdf.save(title.replace(/\s/g, '_').replace(/[^\w-]/g, '') + "_Listas.pdf");
-        });
+        // Footer/Fecha
+        pdf.setFontSize(8);
+        pdf.setTextColor(85, 85, 85);
+        pdf.text(`Documento generado el ${new Date().toLocaleDateString('es-ES')}.`, pdfWidth - padding, pdfHeight - padding + 2, { align: 'right' });
+
+        pdf.save(titleText + "_Plano.pdf");
+        showToast('✅ Plano exportado a PDF.', 'success');
     }
 
-
-    window.generarRiderCompletoPDF = function() {
-        const originalView = currentView;
-        setView('rider'); 
-        const target = document.getElementById('documento-final'); 
-        
-        document.body.style.overflow = 'hidden'; 
-        
-        html2canvas(target, {
-            scale: 2, 
-            useCORS: true, allowTaint: true,
-            ignoreElements: (element) => {
-                return element.id === 'acciones-flotantes' || element.id === 'toolbar-gestion' || element.tagName === 'BUTTON'; 
-            }
-        }).then(canvas => {
-            document.body.style.overflow = ''; 
-            
-            const imgData = canvas.toDataURL('image/jpeg', 0.9);
-            const imgWidth = 210; 
-            const pageHeight = 297; 
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            let heightLeft = imgHeight;
-            const pdf = new jsPDF('p', 'mm', 'a4'); 
-            let position = 0;
-            
-            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-            
-            while (heightLeft >= 0) {
-                position = heightLeft - pageHeight; 
-                pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-            
-            setView(originalView); 
-            
-            let title = headerTitleInput.value || "Rider_Tecnico";
-            if (title.length > 50) { 
-                title = title.substring(0, 50) + '...';
-            }
-            pdf.save(title.replace(/\s/g, '_').replace(/[^\w-]/g, '') + "_Rider.pdf");
-        });
-    }
 
     // ----------------------------------------------------
-    // INICIALIZACIÓN FINAL
+    // EXPORTACIÓN A HTML (Solo Listas Formateadas)
     // ----------------------------------------------------
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedData = localStorage.getItem(STORAGE_KEY);
-        if (!savedData) {
-            drawGridAndFrame();
-        } else {
-            loadProject();
-            // Asegurarse de que los números de CH/Mix sean correctos después de cargar
-            renumerarCanales(); 
+    window.exportarListasHTML = function() {
+        const titleText = headerTitleElement.textContent || "Rider Técnico";
+        
+        // 1. Obtener el HTML del Rider (incluyendo necesidades)
+        const riderHtmlContent = getRiderListHTML(true);
+        
+        if (!riderHtmlContent.trim()) {
+            showToast('❌ No hay listas de Input/Output o Rider de Necesidades para exportar.', 'error');
+            return;
         }
+
+        // 2. Estilos CSS
+        const cssStyles = `
+             :root { --color-primary: #1a237e; } 
+             body { font-family: 'Arial', sans-serif; margin: 20px; color: #333; } 
+             .rider-table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 30px; } 
+             .rider-table th, .rider-table td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 14px; } 
+             .rider-table th { background-color: var(--color-primary); color: white; } 
+             .rider-section-title { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); padding-bottom: 5px; margin-top: 35px; margin-bottom: 15px; font-size: 1.5em; } 
+         `;
+
+        // 3. Combinar en HTML
+        const fullHTMLContent = `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>${titleText} - Listas Rider Técnico</title>
+                <style>
+                    ${cssStyles}
+                </style>
+            </head>
+            <body>
+                <h1 style="font-size: 1.8em; font-weight: 700; text-align: center; color: #1a237e; border-bottom: 3px solid #1a237e; padding-bottom: 12px; margin-bottom: 35px; width: 100%;">Listas Rider: ${titleText}</h1>
+                ${riderHtmlContent}
+                <p style="margin-top: 50px; font-size: 0.8em; color: #555;">Documento generado el ${new Date().toLocaleDateString('es-ES')}.</p>
+            </body>
+            </html>
+        `;
+
+        downloadFile(fullHTMLContent, titleText + "_Listas_Formato.html", 'text/html;charset=utf-8;');
+        showToast('✅ Listas exportadas a HTML.', 'success');
+    }
+
+    // ----------------------------------------------------
+    // EXPORTAR A CSV (Datos puros, sin formato)
+    // ----------------------------------------------------
+
+    window.exportarListasCSV = function() {
+        const title = headerTitleElement.textContent || "Rider_Listas";
+        let csvContent = "";
+        const delimiter = ',';
+
+        function getTableCSV(tableId, sectionTitle) {
+            const table = document.getElementById(tableId);
+            const tbody = document.getElementById(tableId).querySelector('tbody');
+
+            // NO exportar si la lista está vacía
+            if (!table || !tbody || tbody.rows.length === 0) return "";
+
+            let sectionCSV = `"${sectionTitle}"\n`;
+
+            // Encabezados (excluyendo la última columna "Acción")
+            const headerCells = Array.from(table.tHead.querySelector('tr').children);
+            const headers = headerCells.slice(0, -1).map(th => `"${th.textContent.trim()}"`).join(delimiter);
+            sectionCSV += headers + "\n";
+
+            // Filas de datos (excluyendo la última columna "Acción")
+            const rows = Array.from(table.tBodies[0].rows);
+            rows.forEach(row => {
+                const rowData = Array.from(row.children).slice(0, -1).map(cell => {
+                    const input = cell.querySelector('input');
+                    const value = input ? input.value.trim() : cell.textContent.trim();
+                    // Escapar comillas dobles y encerrar el valor
+                    return `"${value.replace(/"/g, '""')}"`; 
+                }).join(delimiter);
+                sectionCSV += rowData + "\n";
+            });
+
+            return sectionCSV + "\n"; // Añadir una línea extra de separación
+        }
+
+        csvContent += getTableCSV('input-list-table', 'Lista de Canales (Input List)');
+        csvContent += getTableCSV('output-list-table', 'Lista de Salidas (Output/Mix List)');
+
+        if (csvContent.trim() === '') {
+            showToast('❌ No hay datos en las listas de Input/Output para exportar a CSV.', 'error');
+            return;
+        }
+
+        // Agregar el título del proyecto al inicio
+        const finalCSV = `"${title}"\n\n${csvContent}`;
+
+        downloadFile(finalCSV, title + "_Listas.csv", 'text/csv;charset=utf-8;');
+        showToast('✅ Listas exportadas a CSV.', 'success');
+    }
+
+    // ----------------------------------------------------
+    // INICIALIZACIÓN (Al cargar el DOM)
+    // ----------------------------------------------------
+
+    document.addEventListener('DOMContentLoaded', function() {
         
+        // 1. Inicializar el editor Quill
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'], 
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['clean']
+        ];
+
+        quill = new Quill('#needs-rider-editor-quill', {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow',
+            placeholder: "Escribe aquí cualquier requerimiento de hospitality, backline, iluminación, o notas adicionales..."
+        });
+
+        // Evento para guardar automáticamente el contenido de Quill al cambiar
+        quill.on('text-change', saveStateSilencioso);
+
+
+        // 2. Cargar el custom icon guardado si existe
+        const savedCustomIcon = localStorage.getItem(CUSTOM_ICON_STORAGE_KEY);
+        if (savedCustomIcon) {
+            updateCustomIconTool(savedCustomIcon);
+        }
+
+        // 3. Cargar el proyecto o dibujar el lienzo vacío
+        loadProject(); 
+
+        // 4. Cargar el contenido de Quill si se pasó como data-initial-content
+        const initialContent = needsRiderEditorElement.getAttribute('data-initial-content');
+        if (quill && initialContent) {
+            quill.root.innerHTML = initialContent;
+            needsRiderEditorElement.removeAttribute('data-initial-content');
+        }
+
+        // 5. Colapsar acordeones de herramientas al inicio (excepto el primero)
         const allContents = document.querySelectorAll('.categoria-contenido');
         allContents.forEach(c => {
-            c.style.maxHeight = null;
+            if (!c.classList.contains('abierto')) {
+                c.style.maxHeight = null;
+            }
         });
         const firstContent = document.querySelector('.categoria-contenido.abierto');
         if (firstContent) {
-            firstContent.style.maxHeight = firstContent.scrollHeight + "px";
+            // Asegurar que el primero se muestre correctamente
+            firstContent.style.maxHeight = firstContent.scrollHeight + "px"; 
         }
         
-        riderInputs.forEach(input => {
-            input.addEventListener('change', saveStateSilencioso);
-            input.addEventListener('keyup', saveStateSilencioso);
-        });
-        
-        // Adjuntar eventos de arrastre y edición manual al cargar o crear
+        // 6. Adjuntar eventos de drag and drop a las filas de la tabla
         attachDragEvents();
         
-        // Adjuntar eventos de arrastre a los iconos de herramientas estándar
+        // 7. Adjuntar eventos de arrastre a los iconos de herramientas estándar
         document.querySelectorAll('.icono-arrastrable:not(.custom-icon-preview)').forEach(attachToolIconDragEvent);
+        
+        // 8. Asegurar que la vista inicial sea Stage Plot
+        setView('stagePlot');
     });
     
     window.newProject = function() { 
         if (confirm('¿Estás seguro de que quieres empezar un proyecto nuevo? Se perderán los cambios no guardados en el navegador.')) {
             localStorage.removeItem(STORAGE_KEY);
-            // También eliminar el icono personalizado del almacenamiento para un proyecto "limpio"
             localStorage.removeItem(CUSTOM_ICON_STORAGE_KEY); 
             window.location.reload(); 
         }
     }
     
-</script>
+    </script>
 </body>
 </html>
