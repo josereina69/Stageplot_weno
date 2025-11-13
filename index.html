@@ -125,6 +125,7 @@
             border-radius: 0 0 4px 4px;
         }
 
+        /* ESTILO DE ICONOS ARRASTRABLES (MODIFICADO) */
         .icono-arrastrable {
             border: 2px solid var(--color-primary);
             padding: 5px 10px;
@@ -142,12 +143,21 @@
         .icono-arrastrable:hover {
             background-color: #e8eaf6;
         }
+        /* Estilo para las IMÁGENES DENTRO de los iconos arrastrables */
+        .icono-arrastrable img { 
+            width: 30px; 
+            height: 30px; 
+            margin-bottom: 5px;
+            object-fit: contain; /* Asegura que la imagen se ajuste */
+        }
+        /* Estilo para iconos de Font Awesome */
         .icono-arrastrable i {
             font-size: 1.5em;
             margin-bottom: 5px;
             color: var(--color-primary);
         }
-        
+        /* Fin de estilo de iconos arrastrables */
+
         .control-grupo {
             display: flex;
             align-items: center;
@@ -577,59 +587,103 @@
                         <div class="icono-arrastrable" draggable="true" data-tipo="texto" style="width: 100px;">
                             <i class="fa-solid fa-font"></i> Texto Libre
                         </div>
-                        
+                        <div class="icono-arrastrable" draggable="true" data-tipo="tarima">
+                            <i class="fa-solid fa-square"></i> Tarima
                         </div>
+                        
+                    </div>
 
                     <div class="categoria-header" onclick="toggleAcordeon(this)">
-                        Elementos de Audio <i class="fas fa-chevron-down"></i>
+                        Micrófonos y DI <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="categoria-contenido">
-                        <div class="icono-arrastrable" draggable="true" data-tipo="microfono">
-                            <i class="fa-solid fa-microphone"></i> Micrófono
+                        <div class="icono-arrastrable" draggable="true" data-tipo="mic_vocal">
+                            <img src="" data-icon-file="mic_dinamico_vocal.svg" alt="Mic Vocal" style="width: 30px; height: 30px;"> Mic. Vocal
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="mic_condensador">
+                            <img src="" data-icon-file="mic_condensador.svg" alt="Mic Cond." style="width: 30px; height: 30px;"> Mic. Cond.
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="mic_instrumento">
+                            <img src="" data-icon-file="mic_instrumento.svg" alt="Mic Inst." style="width: 30px; height: 30px;"> Mic. Inst.
                         </div>
                         <div class="icono-arrastrable" draggable="true" data-tipo="cajadi">
-                            <i class="fa-solid fa-box-open-fll"></i> Caja DI
+                            <img src="" data-icon-file="di_box.svg" alt="DI" style="width: 30px; height: 30px;"> Caja DI
                         </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="receptor_mic">
-                            <i class="fa-solid fa-wifi"></i> Rx Mic.
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="receptor_iem">
-                            <i class="fa-solid fa-headphones-simple"></i> Rx IEM
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="monitor">
-                            <i class="fa-solid fa-speaker"></i> Monitor
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="amplificador">
-                            <i class="fa-solid fa-volume-up"></i> Amplificador
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="consola">
-                            <i class="fa-solid fa-mixer"></i> Consola
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="stagebox">
-                            <i class="fa-solid fa-box-taped"></i> Stage Box
+                        <div class="icono-arrastrable" draggable="true" data-tipo="pie_micro">
+                            <img src="" data-icon-file="pie_micro.svg" alt="Pie Mic" style="width: 30px; height: 30px;"> Pie Micro
                         </div>
                     </div>
+
+                    <div class="categoria-header" onclick="toggleAcordeon(this)">
+                        Monitoreo y PA <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="categoria-contenido">
+                        <div class="icono-arrastrable" draggable="true" data-tipo="monitor_wedge">
+                            <img src="" data-icon-file="monitor_wedge.svg" alt="Mon Wedge" style="width: 30px; height: 30px;"> Monitor Cuña
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="caja_pa">
+                            <img src="" data-icon-file="caja_pa.svg" alt="Caja PA" style="width: 30px; height: 30px;"> Caja PA
+                        </div>
+                         <div class="icono-arrastrable" draggable="true" data-tipo="subwoofer">
+                            <img src="" data-icon-file="subwoofer.svg" alt="Subwoofer" style="width: 30px; height: 30px;"> Subwoofer
+                        </div>
+                    </div>
+                    
+                    <div class="categoria-header" onclick="toggleAcordeon(this)">
+                        Consolas, Rack y Cableado <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="categoria-contenido">
+                        <div class="icono-arrastrable" draggable="true" data-tipo="consola_dig">
+                            <img src="" data-icon-file="consola_digital.svg" alt="Consola Dig." style="width: 30px; height: 30px;"> Consola Dig.
+                        </div>
+                         <div class="icono-arrastrable" draggable="true" data-tipo="eq_rack">
+                            <img src="" data-icon-file="eq_rack.svg" alt="EQ Rack" style="width: 30px; height: 30px;"> EQ Rack
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="fx_processor">
+                            <img src="" data-icon-file="fx_processor.svg" alt="FX Proc." style="width: 30px; height: 30px;"> FX Proc.
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="manguera">
+                            <img src="" data-icon-file="manguera_escenario.svg" alt="Manguera" style="width: 30px; height: 30px;"> Manguera
+                        </div>
+                         <div class="icono-arrastrable" draggable="true" data-tipo="cable_xlr">
+                            <img src="" data-icon-file="cable_xlr.svg" alt="Cable XLR" style="width: 30px; height: 30px;"> Cable XLR
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="flight_case">
+                            <img src="" data-icon-file="flight_case.svg" alt="Flight Case" style="width: 30px; height: 30px;"> Flight Case
+                        </div>
+                    </div>
+
 
                     <div class="categoria-header" onclick="toggleAcordeon(this)">
                         Instrumentos y Muebles <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="categoria-contenido">
-                        <div class="icono-arrastrable" draggable="true" data-tipo="bateria">
-                            <i class="fa-solid fa-drum-set"></i> Batería
+                        <div class="icono-arrastrable" draggable="true" data-tipo="midi_teclado">
+                            <img src="" data-icon-file="midi_teclado.svg" alt="MIDI Teclado" style="width: 30px; height: 30px;"> MIDI Teclado
                         </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="teclado">
-                            <i class="fa-solid fa-piano"></i> Teclado
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="portatil">
-                            <i class="fa-solid fa-laptop"></i> Portátil
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="atrils">
-                            <i class="fa-solid fa-music-note-list"></i> Atril
-                        </div>
-                        <div class="icono-arrastrable" draggable="true" data-tipo="tarima">
-                            <i class="fa-solid fa-square"></i> Tarima
+                        <div class="icono-arrastrable" draggable="true" data-tipo="atril">
+                            <img src="" data-icon-file="atril.svg" alt="Atril" style="width: 30px; height: 30px;"> Atril
                         </div>
                     </div>
+                    
+                    <div class="categoria-header" onclick="toggleAcordeon(this)">
+                        Iluminación y Power <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="categoria-contenido">
+                        <div class="icono-arrastrable" draggable="true" data-tipo="cabeza_movil">
+                            <img src="" data-icon-file="cabeza_movil.svg" alt="Cabeza Movil" style="width: 30px; height: 30px;"> Cabeza Móvil
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="foco_par_led">
+                            <img src="" data-icon-file="foco_par_led.svg" alt="Foco LED" style="width: 30px; height: 30px;"> Foco PAR LED
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="mesa_dmx">
+                            <img src="" data-icon-file="mesa_dmx.svg" alt="Mesa DMX" style="width: 30px; height: 30px;"> Mesa DMX
+                        </div>
+                        <div class="icono-arrastrable" draggable="true" data-tipo="distr_power">
+                            <img src="" data-icon-file="distribucion_power.svg" alt="Distr. Power" style="width: 30px; height: 30px;"> Distr. Power
+                        </div>
+                    </div>
+
 
                     <div class="categoria-header" onclick="toggleAcordeon(this)">
                         Icono Personalizado <i class="fas fa-chevron-down"></i>
@@ -699,6 +753,45 @@
 
     <script>
     // ----------------------------------------------------
+    // CONFIGURACIÓN DE ICONOS DE GITHUB 🌐
+    // ----------------------------------------------------
+    // ⚠️ CONFIGURACIÓN ACTUALIZADA CON TU REPOSITORIO
+    const PLACEHOLDER_GITHUB_REPO = 'josereina69/rider-assets'; 
+    // La ruta RAW usa la rama 'main' (o 'master') y la subcarpeta donde están los archivos.
+    const BASE_ICON_URL = `https://raw.githubusercontent.com/${PLACEHOLDER_GITHUB_REPO}/main/assets/svg/`; 
+
+    // Mapeo de tipo de elemento a nombre de archivo (usando la extensión .svg)
+    // ⚠️ Mapeo actualizado con la lista proporcionada:
+    const CUSTOM_ICON_MAP = {
+        'mic_vocal': 'mic_dinamico_vocal.svg',
+        'mic_condensador': 'mic_condensador.svg',
+        'mic_instrumento': 'mic_instrumento.svg',
+        'cajadi': 'di_box.svg',
+        
+        'monitor_wedge': 'monitor_wedge.svg',
+        'subwoofer': 'subwoofer.svg',
+        'caja_pa': 'caja_pa.svg',
+
+        'consola_dig': 'consola_digital.svg',
+        'eq_rack': 'eq_rack.svg',
+        'fx_processor': 'fx_processor.svg',
+        'manguera': 'manguera_escenario.svg',
+        'cable_xlr': 'cable_xlr.svg',
+        'flight_case': 'flight_case.svg', 
+        
+        'midi_teclado': 'midi_teclado.svg',
+        'atril': 'atril.svg',
+        'pie_micro': 'pie_micro.svg',
+
+        'cabeza_movil': 'cabeza_movil.svg',
+        'foco_par_led': 'foco_par_led.svg',
+        'mesa_dmx': 'mesa_dmx.svg',
+        'distr_power': 'distribucion_power.svg',
+        
+        // 'tarima', 'texto', y 'custom_image' se manejan por separado
+    };
+    
+    // ----------------------------------------------------
     // CONFIGURACIÓN INICIAL Y OBJETOS GLOBALES 
     // ----------------------------------------------------
     
@@ -750,8 +843,6 @@
     const customIconFileInput = document.getElementById('custom-icon-file-input');
     const customIconPreviewContainer = document.getElementById('custom-icon-preview-container');
     const needsRiderEditorElement = document.getElementById('needs-rider-editor-quill');
-    
-    // VARIABLES PARA BOTONES DE EDICIÓN AVANZADA ELIMINADAS
     
     // ----------------------------------------------------
     // LÓGICA DE TOAST NOTIFICATIONS (NUEVO) 💬
@@ -927,32 +1018,11 @@
         saveStateSilencioso();
     }
     // ----------------------------------------------------
-    // LÓGICA KONVA
+    // LÓGICA KONVA (MODIFICADA PARA IMÁGENES DE GITHUB)
     // ----------------------------------------------------
 
-    function getFaUnicode(tipo) {
-        const iconMap = {
-            'microfono': '\uf130',
-            'cajadi': '\uf6a3',
-            'receptor_mic': '\uf1eb',
-            'receptor_iem': '\uf5e7',
-            'amplificador': '\uf028',
-            'bateria': '\uf5e8',
-            'teclado': '\uf890',
-            'atrils': '\uf518',
-            'monitor': '\uf5e6',
-            'consola': '\uf640',
-            'portatil': '\uf109',
-            'stagebox': '\uf466',
-        };
-        return iconMap[tipo] || '\uf041';
-    }
-
     /**
-     * Extrae el número de canal o mix de una etiqueta Konva, buscando formatos 
-     * como "(Ch X)", "Mic ch5", "IEM mix 3".
-     * * **CORRECCIÓN CLAVE**
-     * * @param {string} label - Etiqueta a analizar.
+     * @param {string} label - Etiqueta a analizar.
      * @returns {{number: number, cleanLabel: string, listType: string}}
      */
     function extractChannelNumber(label) {
@@ -971,7 +1041,6 @@
             number = parseInt(match[2], 10);
         } else {
             // 2. Buscar formatos de entrada de usuario: chX, mixX, canal X, mon X, etc.
-            // Se busca cualquier combinación de palabras clave seguida de un número.
             match = cleanLabel.match(/(ch|can|mix|out|mon)\s*(\d+)/i);
             
             if (match) {
@@ -1016,7 +1085,80 @@
         let groupHeight = ICON_SIZE;
         let hasLabel = true;
 
-        if (tipo === 'texto') {
+        const iconFilename = CUSTOM_ICON_MAP[tipo];
+
+        // 1. Elementos que usan IMAGEN DE GITHUB
+        if (iconFilename) {
+            const imageUrl = BASE_ICON_URL + iconFilename;
+            
+            // Intentar usar un nombre más amigable para el label inicial
+            const defaultLabels = {
+                'mic_vocal': 'Mic Vocal',
+                'mic_condensador': 'Mic Cond',
+                'mic_instrumento': 'Mic Inst',
+                'cajadi': 'DI Box',
+                'monitor_wedge': 'Monitor',
+                'subwoofer': 'Sub',
+                'caja_pa': 'PA',
+                'consola_dig': 'Consola',
+                'eq_rack': 'EQ Rack',
+                'fx_processor': 'FX Proc',
+                'manguera': 'Snake',
+                'cable_xlr': 'Cable XLR',
+                'flight_case': 'Flight Case',
+                'midi_teclado': 'Teclado MIDI',
+                'atril': 'Atril',
+                'pie_micro': 'Pie Mic',
+                'cabeza_movil': 'Cabeza Móvil',
+                'foco_par_led': 'Foco LED',
+                'mesa_dmx': 'Mesa DMX',
+                'distr_power': 'Power'
+            };
+            defaultLabel = defaultLabels[tipo] || defaultLabel;
+
+            mainShape = new Konva.Image({
+                x: 0,
+                y: 0,
+                image: new Image(), // Se cargará asíncronamente
+                width: ICON_SIZE,
+                height: ICON_SIZE,
+                name: 'icon-shape',
+                data_type: tipo,
+                data_id_vinculacion: uniqueId,
+            });
+
+            const img = new Image();
+            img.onload = function() {
+                mainShape.image(img);
+                layer.draw();
+            };
+            img.onerror = function() {
+                 console.error(`Error cargando el icono: ${imageUrl}. Usando fallback (rectángulo).`);
+                 // Fallback: Si la imagen falla, usamos un rectángulo simple
+                 mainShape.destroy(); 
+                 const fallbackShape = new Konva.Rect({
+                    x: 0, y: 0, 
+                    width: ICON_SIZE, 
+                    height: ICON_SIZE, 
+                    fill: '#ccc', 
+                    stroke: '#f00', 
+                    strokeWidth: 2, 
+                    name: 'icon-shape',
+                    data_type: tipo,
+                    data_id_vinculacion: uniqueId,
+                 });
+                 group.add(fallbackShape);
+                 layer.draw();
+            }
+            img.src = imageUrl;
+            
+            offsetX = ICON_SIZE / 2;
+            offsetY = ICON_SIZE / 2;
+            groupWidth = ICON_SIZE;
+            groupHeight = ICON_SIZE;
+            hasLabel = true;
+            
+        } else if (tipo === 'texto') {
             hasLabel = false;
             defaultLabel = "Doble click para editar";
             mainShape = new Konva.Text({
@@ -1029,7 +1171,7 @@
                 width: 150, 
                 padding: 5,
                 align: 'left',
-                name: 'icon-shape', // Para texto libre, el texto es la forma editable
+                name: 'icon-shape', 
                 data_type: tipo,
                 data_id_vinculacion: uniqueId,
             });
@@ -1060,7 +1202,7 @@
             hasLabel = true;
 
         } else if (tipo === 'custom_image' && imageDataURL) {
-            // Icono de Imagen Personalizada
+            // Icono de Imagen Personalizada (subida localmente)
             defaultLabel = "Custom";
             mainShape = new Konva.Image({
                 x: 0,
@@ -1073,11 +1215,9 @@
                 data_id_vinculacion: uniqueId,
             });
 
-            // Cargar la imagen
             const img = new Image();
             img.onload = function() {
                 mainShape.image(img);
-                // Ajustar groupWidth/Height si es necesario basándose en el tamaño de la imagen/icono
                 layer.draw();
             };
             img.src = imageDataURL;
@@ -1089,15 +1229,13 @@
             hasLabel = true; 
 
         } else {
-            // Iconos de FontAwesome (Micrófono, DI, etc.)
-            // CREAMOS SOLO CON EL NOMBRE BASE. El canal se asigna al soltarlo en handleDrop.
-            mainShape = new Konva.Text({
+             // Fallback para cualquier elemento no mapeado (ej: si se añade un tipo nuevo sin imagen)
+             mainShape = new Konva.Text({
                 x: 0,
                 y: 0,
-                text: getFaUnicode(tipo),
+                text: '?',
                 fontSize: ICON_SIZE,
-                fontFamily: 'Font Awesome 6 Free',
-                fontStyle: '900',
+                fontFamily: 'Arial',
                 fill: fill,
                 name: 'icon-shape',
                 data_type: tipo,
@@ -1163,7 +1301,8 @@
                     labelNode.offsetX(labelNode.width() / 2);
                 } else {
                     // Para iconos centrados, usar el centro del grupo (que es (0,0) con el offset aplicado)
-                    labelNode.x(0);
+                    // Las imágenes escaladas deben ajustar la posición de la etiqueta al centro visual (0,0)
+                    labelNode.x(0); 
                     labelNode.y(-labelNode.height() - 5);
                     labelNode.offsetX(labelNode.width() / 2);
                 }
@@ -1200,7 +1339,7 @@
         });
 
         // Habilitar Transformador solo para grupos (tarimas, texto libre, etc.)
-        if (tipo === 'tarima' || tipo === 'texto' || tipo === 'custom_image') {
+        if (tipo === 'tarima' || tipo === 'texto' || tipo === 'custom_image' || iconFilename) {
              group.setAttrs({
                 // Configuración predeterminada para el transformador. 
                 rotatable: true,
@@ -1244,7 +1383,7 @@
         
         // El selector de color solo afecta al color del icono/texto si no es una imagen
         const iconShape = shape.children.find(c => c.name() === 'icon-shape');
-        if (iconShape) {
+        if (iconShape && iconShape.getClassName() !== 'Image') {
              const shapeFill = iconShape.fill() || iconShape.stroke() || '#000000';
              colorPicker.value = shapeFill;
         }
@@ -1265,14 +1404,12 @@
         }
     });
     
-    // LISTENERS para las nuevas herramientas de edición ELIMINADOS
-    
     colorPicker.addEventListener('input', function() {
         if (selectedShape) {
             const iconShape = selectedShape.children.find(c => c.name() === 'icon-shape');
             const iconLabel = selectedShape.children.find(c => c.name() === 'icon-label');
 
-            if (iconShape && iconShape.getAttr('data_type') !== 'custom_image') {
+            if (iconShape && iconShape.getClassName() !== 'Image') {
                 // Para rectángulos (Tarima) o Textos de Icono, cambiar el color principal.
                 iconShape.fill(this.value);
             }
@@ -1406,8 +1543,13 @@
 
         const dataType = newIcon.getAttr('data_type');
         
-        // Agregar a la lista de inputs solo si es un elemento de audio/instrumento
-        if (dataType !== 'tarima' && dataType !== 'custom_image' && dataType !== 'texto') {
+        // Agregar a la lista de inputs/outputs solo si es un elemento relevante para el rider
+        if (dataType !== 'tarima' && dataType !== 'custom_image' && dataType !== 'texto' && 
+            dataType !== 'pie_micro' && dataType !== 'atril' && dataType !== 'consola_dig' &&
+            dataType !== 'eq_rack' && dataType !== 'fx_processor' && dataType !== 'manguera' &&
+            dataType !== 'cable_xlr' && dataType !== 'flight_case' && dataType !== 'cabeza_movil' &&
+            dataType !== 'foco_par_led' && dataType !== 'mesa_dmx' && dataType !== 'distr_power'
+        ) {
             const idVinculacion = newIcon.getAttr('data_id_vinculacion');
             
             // Obtener la etiqueta del icono (solo el nombre por defecto)
@@ -1417,9 +1559,9 @@
             // Al crear el icono, no hay información de canal en initialLabelText, pero se sigue la lógica de inserción
             const { cleanLabel } = extractChannelNumber(initialLabelText);
             
-            // Asignar el tipo de lista (Input por defecto)
+            // Asignar el tipo de lista
             let listType = 'input';
-            if (dataType === 'monitor' || dataType === 'receptor_iem') {
+            if (dataType === 'monitor_wedge' || dataType === 'subwoofer' || dataType === 'caja_pa') {
                 listType = 'output';
             }
             
@@ -1452,7 +1594,10 @@
             draggableIcon.setAttribute('data-tipo', 'custom_image');
             
             // Añadir el nuevo elemento al contenedor de la categoría
-            document.querySelector('.categoria-contenido:last-child').appendChild(draggableIcon);
+            // Asumiendo que el contenedor es el último .categoria-contenido
+            const allCategories = document.querySelectorAll('.categoria-contenido');
+            const lastCategory = allCategories[allCategories.length - 1];
+            lastCategory.appendChild(draggableIcon);
             
             // Adjuntar evento de drag al nuevo icono
             attachToolIconDragEvent(draggableIcon); 
@@ -1726,18 +1871,38 @@
         const sourceInputName = nombrePorDefecto.replace(/ \(Ch \d+\)/i, '').replace(/ \(Mix \d+\)/i, '').trim();
 
         if (listaTipo === 'input') {
+            // Lógica de valores por defecto para Input
+            let defaultMicDI = '';
+            if (tipo.startsWith('mic_')) {
+                defaultMicDI = tipo === 'mic_condensador' ? 'Mic Condensador' : 'Mic Dinámico';
+            } else if (tipo === 'cajadi') {
+                defaultMicDI = 'DI Pasiva';
+            } else if (tipo === 'midi_teclado') {
+                 defaultMicDI = 'Línea (Estéreo o Mono)';
+            }
+            
             newRow.innerHTML = `
                 <td>${chInputHTML}</td>
                 <td><input type="text" class="cell-input" value="${sourceInputName}" data-label-tipo="source" onchange="updateKonvaLabelFromTable('${idVinculacion}', this.value)" onkeyup="saveStateSilencioso()"></td>
-                <td><input type="text" class="cell-input" value="${tipo === 'microfono' ? 'SM57' : (tipo === 'cajadi' ? 'DI' : '')}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
+                <td><input type="text" class="cell-input" value="${defaultMicDI}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><input type="text" class="cell-input" value="" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><button class="btn-eliminar" onclick="eliminarFila('${idVinculacion}')">X</button></td>
             `;
         } else { // listaTipo === 'output'
+             // Lógica de valores por defecto para Output
+            let defaultNotes = '';
+            if (tipo === 'monitor_wedge') {
+                defaultNotes = 'Mon. Cuña';
+            } else if (tipo === 'subwoofer') {
+                defaultNotes = 'Sub L/R (Proporcionado por PA)';
+            } else if (tipo === 'caja_pa') {
+                defaultNotes = 'PA L/R (Proporcionado por Sala)';
+            }
+            
             newRow.innerHTML = `
                 <td>${chInputHTML}</td>
                 <td><input type="text" class="cell-input" value="${sourceInputName}" data-label-tipo="dest" onchange="updateKonvaLabelFromTable('${idVinculacion}', this.value)" onkeyup="saveStateSilencioso()"></td>
-                <td><input type="text" class="cell-input" value="${tipo === 'monitor' ? 'Mon. Cuña' : (tipo === 'receptor_iem' ? 'IEM TX' : '')}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
+                <td><input type="text" class="cell-input" value="${defaultNotes}" onchange="saveStateSilencioso()" onkeyup="saveStateSilencioso()"></td>
                 <td><button class="btn-eliminar" onclick="eliminarFila('${idVinculacion}')">X</button></td>
             `;
         }
@@ -1762,16 +1927,21 @@
 
         if (requestedChannel > 0) {
              // 1. Verificar si ya existe una fila en el canal solicitado
-            const existingRow = tbody.querySelector(`tr:nth-child(${requestedChannel})`);
+            const existingRow = tbody.querySelector(`tr[data-id-vinculacion="${idVinculacion}"]`);
             
+            // Si la fila ya existe, la eliminamos primero para reinsertarla en la posición correcta
             if (existingRow) {
-                // Si existe, la movemos al final. Esto liberará la posición.
-                tbody.appendChild(existingRow); 
-                targetIndex = requestedChannel - 1; // La nueva fila irá a esta posición
-            } else {
-                // Si no existe, usamos el canal solicitado.
-                targetIndex = requestedChannel - 1;
+                 existingRow.remove();
             }
+
+            // Mover las filas existentes si es necesario para liberar la posición
+            if (requestedChannel <= tbody.rows.length) {
+                targetIndex = requestedChannel - 1; 
+            } else {
+                 // Si el canal solicitado es mayor que el número actual de filas, simplemente añadir al final.
+                 targetIndex = tbody.rows.length;
+            }
+            
         } else {
             // 2. Si no se solicitó canal, añadir al final.
             targetIndex = tbody.rows.length;
@@ -2149,7 +2319,6 @@
              .rider-table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 30px; } 
              .rider-table th, .rider-table td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 14px; } 
              .rider-table th { background-color: var(--color-primary); color: white; } 
-             .rider-section-title { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); padding-bottom: 5px; margin-top: 35px; margin-bottom: 15px; font-size: 1.5em; } 
              .stage-plot-container { max-width: 900px; height: 600px; margin: 20px auto; border: 3px solid #1a237e; box-shadow: 0 4px 10px rgba(0,0,0,0.1); } 
              @media print { .stage-plot-container { page-break-after: always; } } 
          `;
@@ -2349,6 +2518,22 @@
     // ----------------------------------------------------
     // INICIALIZACIÓN (Al cargar el DOM)
     // ----------------------------------------------------
+    
+    /**
+     * Carga las imágenes de GitHub en los elementos arrastrables del sidebar.
+     */
+    function loadSidebarImages() {
+        document.querySelectorAll('.icono-arrastrable img[data-icon-file]').forEach(img => {
+            const filename = img.getAttribute('data-icon-file');
+            img.src = BASE_ICON_URL + filename;
+            
+            // Opcional: Manejar errores de carga
+            img.onerror = function() {
+                 img.style.border = '1px solid red'; // Mostrar borde rojo si falla
+                 img.alt = 'Error';
+            }
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         
@@ -2383,17 +2568,20 @@
             updateCustomIconTool(savedCustomIcon);
         }
 
-        // 3. Cargar el proyecto o dibujar el lienzo vacío
+        // 3. Cargar las imágenes de GitHub en el sidebar
+        loadSidebarImages(); 
+
+        // 4. Cargar el proyecto o dibujar el lienzo vacío
         loadProject(); 
 
-        // 4. Cargar el contenido de Quill si se pasó como data-initial-content
+        // 5. Cargar el contenido de Quill si se pasó como data-initial-content
         const initialContent = needsRiderEditorElement.getAttribute('data-initial-content');
         if (quill && initialContent) {
             quill.root.innerHTML = initialContent;
             needsRiderEditorElement.removeAttribute('data-initial-content');
         }
 
-        // 5. Colapsar acordeones de herramientas al inicio (excepto el primero)
+        // 6. Colapsar acordeones de herramientas al inicio (excepto el primero)
         const allContents = document.querySelectorAll('.categoria-contenido');
         allContents.forEach(c => {
             if (!c.classList.contains('abierto')) {
@@ -2406,13 +2594,13 @@
             firstContent.style.maxHeight = firstContent.scrollHeight + "px"; 
         }
         
-        // 6. Adjuntar eventos de drag and drop a las filas de la tabla
+        // 7. Adjuntar eventos de drag and drop a las filas de la tabla
         attachDragEvents();
         
-        // 7. Adjuntar eventos de arrastre a los iconos de herramientas estándar
+        // 8. Adjuntar eventos de arrastre a los iconos de herramientas estándar
         document.querySelectorAll('.icono-arrastrable:not(.custom-icon-preview)').forEach(attachToolIconDragEvent);
         
-        // 8. Asegurar que la vista inicial sea Stage Plot
+        // 9. Asegurar que la vista inicial sea Stage Plot
         setView('stagePlot');
     });
     
